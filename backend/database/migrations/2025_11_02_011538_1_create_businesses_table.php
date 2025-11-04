@@ -8,12 +8,13 @@ return new class extends Migration {
         Schema::create('businesses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('email', 200)->unique();
-            $table->string('phoneNumber', 20)->nullable();
+            $table->string('phone_number', 20)->nullable();
             $table->string('name', 100);
-            $table->string('adress', 150)->nullable();
-            $table->string('profilePicture', 255)->nullable();
-            $table->string('instagramUrl', 255)->nullable();
-            $table->string('facebookUrl', 255)->nullable();
+            $table->string('address', 150)->nullable();
+            $table->string('profile_picture', 255)->nullable();
+            $table->string('instagram_url', 255)->nullable();
+            $table->string('facebook_url', 255)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

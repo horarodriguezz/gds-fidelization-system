@@ -8,10 +8,11 @@ return new class extends Migration {
         Schema::create('customers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 50);
-            $table->string('phoneNumber', 20)->nullable();
-            $table->string('profilePic', 255)->nullable();
+            $table->string('phone_number', 20)->unique();
+            $table->string('profile_picture', 255)->nullable();
             $table->string('email', 150)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

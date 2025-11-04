@@ -9,14 +9,13 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->uuid('reward_id');
             $table->uuid('business_id');
-            $table->uuid('customerId');
-            $table->integer('pointsUsed');
-            $table->date('createdAt');
+            $table->uuid('customer_id');
+            $table->integer('points_used');
             $table->timestamps();
 
-            $table->foreign('reward_id')->references('id')->on('rewards')->cascadeOnDelete();
-            $table->foreign('business_id')->references('id')->on('businesses')->cascadeOnDelete();
-            $table->foreign('customerId')->references('id')->on('customers')->cascadeOnDelete();
+            $table->foreign('reward_id')->references('id')->on('rewards');
+            $table->foreign('business_id')->references('id')->on('businesses');
+            $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
 
