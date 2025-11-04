@@ -38,6 +38,7 @@ return [
     'mailers' => [
         'resend' => [
             'transport' => 'resend',
+            'verify_peer' => false
         ],
     ],
 
