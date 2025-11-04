@@ -9,37 +9,37 @@ use App\Exceptions\AppException;
 
 class Handler extends ExceptionHandler
 {
-    public function render($request, Throwable $exception): JsonResponse
+    public function render($request, Throwable $e): JsonResponse
     {
         $response = [
             'success' => false,
-            'message' => $exception->getMessage(),
-            'code' => method_exists($exception, 'getStatusCode')
-                ? $exception->getStatusCode()
+            'message' => $e->getMessage(),
+            'code' => method_exists($e, 'getStatusCode')
+                ? $e->getStatusCode()
                 : 500,
         ];
 
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
             $response['message'] = 'Error de validación';
-            $response['errors'] = $exception->errors();
+            $response['errors'] = $e->errors();
             $response['code'] = 422;
         }
 
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+        if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
             $response['message'] = 'Recurso no encontrado';
             $response['code'] = 404;
         }
 
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             $response['message'] = 'Ruta no encontrada';
             $response['code'] = 404;
         }
 
-        if ($exception instanceof AppException) {
-            $response['code'] = $exception->getCode();
+        if ($e instanceof AppException) {
+            $response['code'] = $e->getCode();
 
-            if ($exception->data !== null) {
-                $response['data'] = $exception->data;
+            if ($e->data !== null) {
+                $response['data'] = $e->data;
             }
         }
 
