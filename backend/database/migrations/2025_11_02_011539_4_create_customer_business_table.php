@@ -12,8 +12,8 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->primary(['business_id', 'customer_id']);
-            $table->foreign('business_id')->references('id')->on('businesses')->cascadeOnDelete();
-            $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnDelete();
+            $table->foreign('business_id')->references('id')->on('businesses')->restrictOnDelete();
+            $table->foreign('customer_id')->references('id')->on('customers')->restrictOnDelete();
         });
     }
 
