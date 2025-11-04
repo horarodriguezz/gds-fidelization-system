@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->string('email', 200)->unique();
             $table->string('phone_number', 20)->nullable();
             $table->enum('role', Role::cases())->default(Role::USER);
-            $table->boolean('confirmed')->default(false);
             $table->dateTime('email_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

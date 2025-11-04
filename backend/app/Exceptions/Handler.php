@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             $response['message'] = 'Error de validación';
-            $response['errors'] = $e->errors();
+            $response['data'] = $e->errors();
             $response['code'] = 422;
         }
 
