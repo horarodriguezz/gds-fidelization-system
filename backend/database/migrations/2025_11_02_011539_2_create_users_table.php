@@ -9,11 +9,12 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('password', 255)->nullable();
-            $table->string('name', 100);
-            $table->string('email', 200)->nullable();
-            $table->string('phone_number', 20)->unique();
+            $table->string('first_name', 50);
+            $table->string('last_name', 50);
+            $table->string('email', 200)->unique();
+            $table->string('phone_number', 20)->nullable();
             $table->enum('role', Role::cases())->default(Role::USER);
-            $table->boolean('confirmed')->default(false);
+            $table->dateTime('email_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
