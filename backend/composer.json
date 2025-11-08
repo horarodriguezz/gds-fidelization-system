@@ -72,7 +72,9 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ]
+        ],
+        "sailup": "./vendor/bin/sail up",
+        "saildown": "./vendor/bin/sail down"
     },
     "extra": {
         "laravel": {
