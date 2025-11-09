@@ -39,22 +39,18 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        return successResponse('Usuario registrado exitosamente');
+        return successResponse('Usuario registrado exitosamente', null, 201);
     }
 
-    public function verify(string $id, string $hash): RedirectResponse
+    public function verify(string $id, string $hash): JsonResponse
     {
         $user = User::findOrFail($id);
-
-        $redirectUrl = config('app.frontend_url') . '/auth/verify';
-
-        echo $redirectUrl;
 
         if (!$user) {
             $title = 'Ha ocurrido un error';
             $message = 'No hemos encontrado un usuario con el email especificado.';
 
-            return Redirect::away($redirectUrl . '?success=false' . '&title=' . urlencode($title) . '&message=' . urlencode($message));
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
         }
 
         $emailOk = hash_equals(sha1($user->getEmailForVerification()), $hash);
@@ -63,14 +59,14 @@ class AuthController extends Controller
             $title = 'Ha ocurrido un error';
             $message = 'El enlace de verificación no es válido.';
 
-            return Redirect::away($redirectUrl . '?success=false' . '&title=' . urlencode($title) . '&message=' . urlencode($message));
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
         }
 
         if ($user->hasVerifiedEmail()) {
             $title = 'Correo ya verificado';
             $message = 'Su correo ya ha sido verificado anteriormente.';
 
-            return Redirect::away($redirectUrl . '?success=true' . '&title=' . urlencode($title) . '&message=' . urlencode($message));
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
         }
 
         $user->markEmailAsVerified();
@@ -78,6 +74,6 @@ class AuthController extends Controller
         $title = 'Correo verificado';
         $message = 'Su correo ha sido verificado exitosamente.';
 
-        return Redirect::away($redirectUrl . '?success=true' . '&title=' . urlencode($title) . '&message=' . urlencode($message));
+        return successResponse($title, ['title' => $title, 'message' => $message]);
     }
 }
