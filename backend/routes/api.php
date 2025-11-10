@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Business\AuthController as BusinessAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
+Route::prefix('business')->group(function () {
+    Route::prefix('auth')->controller(BusinessAuthController::class)->group(function () {
+        Route::post('/register', 'register');
+
+        Route::post('/login', 'login');
+
+        Route::get('/email/verify/{id}/{hash}', 'verify')->middleware(['signed'])->name('verification.verify');
+
+        Route::post('/revalidate-email', 'revalidateEmail');
+    });
 });
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return successResponse('Email verificado con éxito');
-})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
