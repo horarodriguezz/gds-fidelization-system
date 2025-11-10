@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Business;
 
+use App\DTOs\LoginError;
+use App\Enums\ErrorSubCode;
 use App\Enums\Role;
 use App\Http\Requests\Auth\Business\PostLoginRequest;
 use App\Http\Requests\Auth\Business\PostRegisterRequest as BusinessPostRegisterRequest;
@@ -91,7 +93,7 @@ class AuthController extends Controller
             $title = 'Correo no verificado';
             $message = 'Por favor, verifique su correo antes de iniciar sesión.';
 
-            throwAppError($title, 403, ['title' => $title, 'message' => $message]);
+            throwAppError($title, 403, ['title' => $title, 'message' => $message], ErrorSubCode::MAIL_NOT_VERIFIED);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;

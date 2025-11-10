@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ErrorSubCode;
 use App\Exceptions\AppException;
 
 if (!function_exists('throwAppError')) {
@@ -9,12 +10,13 @@ if (!function_exists('throwAppError')) {
      * @param string $message  Mensaje descriptivo del error.
      * @param int $code        Código HTTP (ej: 400, 401, 404...).
      * @param array|null $data Datos adicionales opcionales.
-     *
+     * @param ErrorSubCode|null $subcode Código de suberror opcional.
+     * 
      * @throws AppException
      */
-    function throwAppError(string $message, int $code = 400, ?array $data = null): void
+    function throwAppError(string $message, int $code = 400, ?array $data = null, ?ErrorSubCode $subcode = null): void
     {
-        throw new AppException($message, $code, $data);
+        throw new AppException($message, $code, $data, $subcode);
     }
 }
 
