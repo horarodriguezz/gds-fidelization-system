@@ -7,6 +7,7 @@ use App\Enums\ErrorSubCode;
 use App\Enums\Role;
 use App\Http\Requests\Auth\Business\PostLoginRequest;
 use App\Http\Requests\Auth\Business\PostRegisterRequest as BusinessPostRegisterRequest;
+use App\Http\Requests\Auth\Business\PostRevalidateEmailRequest;
 use App\Models\Business;
 use App\Models\LoyaltyConfig;
 use App\Models\User;
@@ -99,5 +100,29 @@ class AuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
 
         return successResponse("Autenticación exitosa", ['token' => $token]);
+    }
+
+    public function revalidateEmail(PostRevalidateEmailRequest $request): JsonResponse {
+        $validated = $request->validated();
+
+        $user = User::whereEmail($validated['email'])->first();
+
+        if (!$user) {
+            $title = 'Ha ocurrido un error';
+            $message = 'No hemos encontrado un usuario con el email especificado.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            $title = 'Correo ya verificado';
+            $message = 'Su correo ya ha sido verificado anteriormente.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return successResponse('Correo de verificación reenviado exitosamente', null, 200);
     }
 }
