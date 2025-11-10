@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Business\AuthController as BusinessAuthController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 Route::prefix('business')->group(function () {
-    Route::prefix('auth')->controller(AuthController::class)->group(function () {
+    Route::prefix('auth')->controller(BusinessAuthController::class)->group(function () {
         Route::post('/register', 'register');
 
         Route::post('/login', 'login');

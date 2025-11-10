@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Business;
 
 use App\Enums\Role;
-use App\Http\Requests\Auth\PostRegisterRequest;
+use App\Http\Requests\Auth\Business\PostLoginRequest;
+use App\Http\Requests\Auth\Business\PostRegisterRequest as BusinessPostRegisterRequest;
 use App\Models\Business;
 use App\Models\LoyaltyConfig;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
-    public function register(PostRegisterRequest $request): JsonResponse
+    public function register(BusinessPostRegisterRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -75,5 +73,29 @@ class AuthController extends Controller
         $message = 'Su correo ha sido verificado exitosamente.';
 
         return successResponse($title, ['title' => $title, 'message' => $message]);
+    }
+
+    public function login(PostLoginRequest $request): JsonResponse {
+        $validated = $request->validated();
+
+        $user = User::whereEmail($validated['email'])->first();
+
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            $title = 'Credenciales inválidas';
+            $message = 'El email o la contraseña son incorrectos.';
+
+            throwAppError($title, 401, ['title' => $title, 'message' => $message]);
+        }
+
+        if (!$user->hasVerifiedEmail()) {
+            $title = 'Correo no verificado';
+            $message = 'Por favor, verifique su correo antes de iniciar sesión.';
+
+            throwAppError($title, 403, ['title' => $title, 'message' => $message]);
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return successResponse("Autenticación exitosa", ['token' => $token]);
     }
 }

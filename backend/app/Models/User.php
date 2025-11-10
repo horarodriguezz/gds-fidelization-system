@@ -9,6 +9,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property string $id
@@ -45,8 +46,8 @@ use Illuminate\Support\Carbon;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasUuids;
-    use Notifiable;
+    use HasUuids, Notifiable, HasApiTokens;
+    
 
     protected $fillable = ['first_name', 'last_name', 'email', 'password', 'phone_number', 'role', 'business_id', 'confirmed'];
 
