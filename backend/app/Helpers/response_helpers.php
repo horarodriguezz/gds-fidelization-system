@@ -33,7 +33,7 @@ if (!function_exists('successResponse')) {
         return response()->json([
             'success' => true,
             'message' => $message,
-            'code' => $code,
+            'status' => $code,
             'data' => $data,
         ], $code);
     }
