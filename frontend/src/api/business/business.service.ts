@@ -39,4 +39,12 @@ export class BusinessService {
 
     return response;
   }
+
+  public async logout(): Promise<SuccessResponse> {
+    const response = await httpClient.post<SuccessResponse>(
+      `${this.resource}/auth/logout`
+    );
+
+    return response;
+  }
 }

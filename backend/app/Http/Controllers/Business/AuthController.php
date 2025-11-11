@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Log;
+use Request;
 
 class AuthController extends Controller
 {
@@ -129,5 +130,12 @@ class AuthController extends Controller
         $user->sendEmailVerificationNotification();
 
         return successResponse('Correo de verificación reenviado exitosamente', null, 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return successResponse('Cierre de sesión exitoso');
     }
 }
