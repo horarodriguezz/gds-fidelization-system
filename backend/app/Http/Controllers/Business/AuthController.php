@@ -13,9 +13,12 @@ use App\Models\LoyaltyConfig;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Log;
 
 class AuthController extends Controller
 {
@@ -43,15 +46,17 @@ class AuthController extends Controller
         return successResponse('Usuario registrado exitosamente', null, 201);
     }
 
-    public function verify(string $id, string $hash): JsonResponse
+    public function verify(string $id, string $hash): RedirectResponse
     {
         $user = User::findOrFail($id);
+
+        $frontendUrl = config('app.frontend_url') . '/auth/verify';
 
         if (!$user) {
             $title = 'Ha ocurrido un error';
             $message = 'No hemos encontrado un usuario con el email especificado.';
 
-            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+            return redirect()->away($frontendUrl . '?success=false&title=' . urlencode($title) . '&message=' . urlencode($message));
         }
 
         $emailOk = hash_equals(sha1($user->getEmailForVerification()), $hash);
@@ -60,14 +65,14 @@ class AuthController extends Controller
             $title = 'Ha ocurrido un error';
             $message = 'El enlace de verificación no es válido.';
 
-            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+            return redirect()->away($frontendUrl . '?success=false&title=' . urlencode($title) . '&message=' . urlencode($message));
         }
 
         if ($user->hasVerifiedEmail()) {
             $title = 'Correo ya verificado';
             $message = 'Su correo ya ha sido verificado anteriormente.';
 
-            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+            return redirect()->away($frontendUrl . '?success=false&title=' . urlencode($title) . '&message=' . urlencode($message));
         }
 
         $user->markEmailAsVerified();
@@ -75,7 +80,7 @@ class AuthController extends Controller
         $title = 'Correo verificado';
         $message = 'Su correo ha sido verificado exitosamente.';
 
-        return successResponse($title, ['title' => $title, 'message' => $message]);
+        return redirect()->away($frontendUrl . '?success=true&title=' . urlencode($title) . '&message=' . urlencode($message));
     }
 
     public function login(PostLoginRequest $request): JsonResponse {
