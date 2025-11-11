@@ -12,5 +12,7 @@ Route::prefix('business')->group(function () {
         Route::get('/email/verify/{id}/{hash}', 'verify')->middleware(['signed'])->name('verification.verify');
 
         Route::post('/revalidate-email', 'revalidateEmail');
+
+        Route::post('/logout', 'logout')->middleware('auth:sanctum');
     });
 });
