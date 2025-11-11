@@ -1,0 +1,22 @@
+---
+import { type Icon as IconType } from "@lucide/astro";
+import { Card as CardComponent } from "@/components/ui/card";
+
+export interface CardProps {
+  icon: typeof IconType;
+
+  title: string;
+
+  description: string;
+}
+
+const { icon: Icon, title, description } = Astro.props as CardProps;
+---
+
+<CardComponent
+  className='bg-white/10 backdrop-blur-sm border-white/20 p-6 hover:bg-white/15 transition-colors justify-between'
+>
+  <Icon class='w-8 h-8 mb-3 text-white' />
+  <h3 class='font-semibold mb-2 h-12'>{title}</h3>
+  <p class='text-sm text-white/80'>{description}</p>
+</CardComponent>
