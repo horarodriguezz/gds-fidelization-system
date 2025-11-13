@@ -13,6 +13,7 @@ import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
 import { registerData } from "@/store/auth";
 import { Pathname } from "../../../../config/pathname";
+import { APP_NAME } from "../../../../config/app";
 
 const schema = z.object({
   first_name: z
@@ -86,12 +87,11 @@ function Form() {
 
   return (
     <div className='w-full max-w-md'>
-      {/* Mobile logo */}
       <div className='lg:hidden flex items-center gap-3 mb-8'>
         <div className='w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center'>
           <Store className='w-6 h-6 text-primary' />
         </div>
-        <span className='text-2xl font-bold'>FideliApp</span>
+        <span className='text-2xl font-bold'>{APP_NAME}</span>
       </div>
 
       <div className='mb-8'>

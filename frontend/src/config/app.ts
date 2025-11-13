@@ -1,1 +1,1 @@
-export const APP_NAME_ENV = "APP_NAME";
+export const APP_NAME = import.meta.env.PUBLIC_APP_NAME || "FidelityApp";
