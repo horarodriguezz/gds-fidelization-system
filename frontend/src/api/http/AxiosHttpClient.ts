@@ -9,7 +9,10 @@ export class AxiosHttpClient implements HttpClient {
     this.client = axios.create({
       baseURL,
       timeout: 10000,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
 
     this.setupInterceptors();

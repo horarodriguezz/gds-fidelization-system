@@ -1,10 +1,19 @@
+import { useState } from "react";
 import * as z from "zod";
 import { Controller, useForm } from "react-hook-form";
+import { Store } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field, FieldError, FieldLabel } from "../../../../components/ui/field";
-import { Input } from "../../../../components/ui/input";
-import { Button } from "../../../../components/ui/button";
-import { BusinessService } from "../../../../api/business/business.service";
+
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { BusinessService } from "@/api/business/business.service";
+import { Spinner } from "@/components/ui/spinner";
+import type { ApiError } from "@/api/types/Error";
+import { toast } from "sonner";
+import { registerData } from "@/store/auth";
+import { Pathname } from "../../../../config/pathname";
+import { APP_NAME } from "../../../../config/app";
 
 const schema = z.object({
   first_name: z
@@ -37,8 +46,11 @@ const schema = z.object({
 });
 
 function Form() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+
     defaultValues: {
       first_name: "",
       last_name: "",
@@ -50,15 +62,20 @@ function Form() {
   });
 
   const onSubmit = (data: z.infer<typeof schema>) => {
+    if (isLoading) {
+      return;
+    }
+
     const service = new BusinessService();
+
+    setIsLoading(true);
 
     service
       .register(data)
-      .then((response) => {
-        console.log("Registered successfully:", response);
-      })
-      .catch((error) => {
-        console.error("Registration error:", error);
+      .then(() => registerData.set({ email: data.email, success: true }))
+      .catch((error: ApiError) => toast.error(error.message))
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -70,12 +87,11 @@ function Form() {
 
   return (
     <div className='w-full max-w-md'>
-      {/* Mobile logo */}
       <div className='lg:hidden flex items-center gap-3 mb-8'>
         <div className='w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center'>
-          {/* <Store class='w-6 h-6 text-primary' /> */}
+          <Store className='w-6 h-6 text-primary' />
         </div>
-        <span className='text-2xl font-bold'>FideliApp</span>
+        <span className='text-2xl font-bold'>{APP_NAME}</span>
       </div>
 
       <div className='mb-8'>
@@ -85,7 +101,13 @@ function Form() {
         </p>
       </div>
 
-      <form id='register-form' onSubmit={handleSubmit} className='space-y-5'>
+      <form
+        id='register-form'
+        onSubmit={handleSubmit}
+        className='space-y-5'
+        method='POST'
+        aria-disabled={isLoading}
+      >
         <div className='space-y-2'>
           <Controller
             name='business_name'
@@ -236,22 +258,19 @@ function Form() {
           />
         </div>
 
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            form.handleSubmit(onSubmit)();
-          }}
-          className='w-full h-11'
-          size='lg'
-        >
+        <Button className='w-full h-11' size='lg' disabled={isLoading}>
           Crear Cuenta
+          {isLoading && <Spinner />}
         </Button>
       </form>
 
       <div className='mt-6 text-center'>
         <p className='text-sm text-muted-foreground'>
           ¿Ya tienes una cuenta?{" "}
-          <a href='/login' className='text-primary font-medium hover:underline'>
+          <a
+            href={Pathname.LOGIN}
+            className='text-primary font-medium hover:underline'
+          >
             Inicia sesión
           </a>
         </p>
