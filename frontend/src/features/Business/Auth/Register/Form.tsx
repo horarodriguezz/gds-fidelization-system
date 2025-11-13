@@ -4,13 +4,15 @@ import { Controller, useForm } from "react-hook-form";
 import { Store } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Field, FieldError, FieldLabel } from "../../../../components/ui/field";
-import { Input } from "../../../../components/ui/input";
-import { Button } from "../../../../components/ui/button";
-import { BusinessService } from "../../../../api/business/business.service";
-import { Spinner } from "../../../../components/ui/spinner";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { BusinessService } from "@/api/business/business.service";
+import { Spinner } from "@/components/ui/spinner";
+import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
-import type { ApiError } from "../../../../api/types/Error";
+import { registerData } from "@/store/auth";
+import { Pathname } from "../../../../config/pathname";
 
 const schema = z.object({
   first_name: z
@@ -59,15 +61,17 @@ function Form() {
   });
 
   const onSubmit = (data: z.infer<typeof schema>) => {
+    if (isLoading) {
+      return;
+    }
+
     const service = new BusinessService();
 
     setIsLoading(true);
 
     service
       .register(data)
-      .then((response) => {
-        console.log("Registered successfully:", response);
-      })
+      .then(() => registerData.set({ email: data.email, success: true }))
       .catch((error: ApiError) => toast.error(error.message))
       .finally(() => {
         setIsLoading(false);
@@ -102,6 +106,7 @@ function Form() {
         onSubmit={handleSubmit}
         className='space-y-5'
         method='POST'
+        aria-disabled={isLoading}
       >
         <div className='space-y-2'>
           <Controller
@@ -253,7 +258,7 @@ function Form() {
           />
         </div>
 
-        <Button className='w-full h-11' size='lg'>
+        <Button className='w-full h-11' size='lg' disabled={isLoading}>
           Crear Cuenta
           {isLoading && <Spinner />}
         </Button>
@@ -263,7 +268,7 @@ function Form() {
         <p className='text-sm text-muted-foreground'>
           ¿Ya tienes una cuenta?{" "}
           <a
-            href='/auth/login'
+            href={Pathname.LOGIN}
             className='text-primary font-medium hover:underline'
           >
             Inicia sesión

@@ -3,6 +3,7 @@ import AuthLayout from "../../layouts/Auth/AuthLayout.astro";
 import type { CardProps } from "../../layouts/Auth/Card.astro";
 import { Award, TrendingUp, Users } from "@lucide/astro";
 import Form from "@/features/Business/Auth/Register/Form";
+import SuccessConfirmation from "@/features/Business/Auth/Register/Dialog";
 
 const cards: [CardProps, CardProps, CardProps] = [
   {
@@ -28,5 +29,7 @@ const cards: [CardProps, CardProps, CardProps] = [
   title='Comienza a fidelizar clientes hoy mismo'
   description='Únete a cientos de negocios que ya están aumentando sus ventas y mejorando la retención de clientes con nuestro sistema de puntos.'
 >
-  <Form client:visible />
+  <Form client:only />
+
+  <SuccessConfirmation client:load />
 </AuthLayout>
