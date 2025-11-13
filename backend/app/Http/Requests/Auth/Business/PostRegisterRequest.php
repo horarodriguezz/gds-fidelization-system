@@ -8,7 +8,7 @@ class PostRegisterRequest extends FormRequest {
     public function rules(): array {
         return [
             'first_name' => 'required|string|max:50',
-            'last_name' => 'string|max:50',
+            'last_name' => 'string|max:50|nullable',
             'email' => 'required|string|email|max:200|unique:users',
             'password' => 'required|string|min:8|max:30|confirmed|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/',
             'business_name' => 'required|string|max:100',
