@@ -48,17 +48,6 @@ services:
                 - "-p${DB_PASSWORD}"
             retries: 3
             timeout: 5s
-    frontend:
-        build:
-            context: ../frontend
-            dockerfile: Dockerfile
-        image: astro-frontend
-        ports:
-            - "4321:4321"
-        networks:
-            - sail
-        depends_on:
-            - laravel.test
 networks:
     sail:
         driver: bridge
