@@ -7,7 +7,7 @@ export class ApiError extends Error {
   public readonly status: number;
   public readonly timestamp?: string;
   public readonly data?: ApiErrorData;
-  public readonly subcode?: string;
+  public readonly subcode?: number;
 
   constructor(params: {
     type: string;
@@ -15,7 +15,7 @@ export class ApiError extends Error {
     message: string;
     timestamp?: string;
     data?: ApiErrorData;
-    subcode?: string;
+    subcode?: number;
   }) {
     super(params.message);
     this.name = params.type;

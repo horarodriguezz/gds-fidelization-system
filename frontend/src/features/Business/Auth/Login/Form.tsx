@@ -14,6 +14,11 @@ import { toast } from "sonner";
 import { Pathname } from "../../../../config/pathname";
 import { APP_NAME } from "../../../../config/app";
 import { HttpStatusCode } from "axios";
+import type { LoginResponseData } from "../../../../api/business/business.types";
+import type { SuccessResponse } from "../../../../api/types/Response";
+import { BUSINESS_TOKEN_KEY } from "../../../../config/localStorage";
+import { ErrorSubCode } from "../../../../api/types/ErrorSubCode";
+import { notVerifyPopupData } from "../../../../store/auth";
 
 const schema = z.object({
   email: z.string().email("El correo electrónico no es válido"),
@@ -39,8 +44,10 @@ function Form() {
     },
   });
 
-  const handleSuccess = () => {
+  const handleSuccess = (r: SuccessResponse<LoginResponseData>) => {
     toast.success("Inicio de sesión exitoso");
+
+    localStorage.setItem(BUSINESS_TOKEN_KEY, r.data.token);
 
     window.location.href = Pathname.BUSINESS_DASHBOARD;
   };
@@ -49,6 +56,17 @@ function Form() {
     if (error.status === HttpStatusCode.Unauthorized) {
       form.setError("password", { message: error.message });
       form.setError("email", { message: error.message });
+
+      return;
+    }
+
+    if (
+      error.status === HttpStatusCode.Forbidden &&
+      error.subcode === ErrorSubCode.EMAIL_NOT_VERIFIED
+    ) {
+      notVerifyPopupData.set({ show: true, email: form.getValues("email") });
+
+      return;
     }
 
     toast.error(error.data?.title, {
