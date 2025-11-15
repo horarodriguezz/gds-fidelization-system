@@ -15,4 +15,8 @@ Route::prefix('business')->group(function () {
 
         Route::post('/logout', 'logout')->middleware('auth:sanctum');
     });
+
+    Route::prefix('customers')->controller(CustomerController::class)->group(function () {
+        Route::post('/', 'create')->middleware('auth:sanctum');
+    });
 });

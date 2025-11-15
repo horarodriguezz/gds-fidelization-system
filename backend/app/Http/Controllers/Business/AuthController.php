@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Business;
 
-use App\DTOs\LoginError;
 use App\Enums\ErrorSubCode;
 use App\Enums\Role;
 use App\Http\Requests\Auth\Business\PostLoginRequest;
@@ -17,8 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Log;
 use Request;
 
 class AuthController extends Controller
