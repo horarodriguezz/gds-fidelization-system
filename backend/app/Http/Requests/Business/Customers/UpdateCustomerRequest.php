@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Business\Customers;
 
+use App\Rules\ExistingCustomerWithPhone;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCustomerRequest extends FormRequest {
@@ -13,7 +14,7 @@ class UpdateCustomerRequest extends FormRequest {
         'first_name' => 'string|max:50|nullable',
         'last_name' => 'string|max:50|nullable',
         'email' => 'string|email|max:200|nullable|unique:customers,email,' . $customer->id,
-        'phone_number' => 'phone:AR,INTERNATTIONAL|nullable|unique:customers,phone_number,' . $customer->id
+        'phone_number' => ['phone:AR,INTERNATIONAL', 'nullable', new ExistingCustomerWithPhone()->except($customer->id)]
     ];
   }
 

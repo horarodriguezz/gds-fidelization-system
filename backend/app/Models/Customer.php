@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
@@ -40,6 +40,7 @@ use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 class Customer extends Model
 {
     use HasUuids;
+    use SoftDeletes;
 
     protected $fillable = ['first_name', 'last_name', 'phone_number', 'phone_validated_at', 'profile_picture', 'email'];
 
