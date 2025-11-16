@@ -35,7 +35,7 @@ class ExistingCustomerWithPhone implements ValidationRule
 
         $existingCustomer = $query->first();
 
-        if ($existingCustomer) {
+        if ($existingCustomer && $existingCustomer->deleted_at === null) {
             $fail('El número de teléfono pertenece a un cliente ya registrado.');
         }
     }

@@ -12,7 +12,7 @@ class CreateCustomerRequest extends FormRequest {
           'first_name' => 'required|string|max:50',
           'last_name' => 'string|max:50|nullable',
           'email' => 'string|email|max:200|unique:customers,email|nullable',
-          'phone_number' => ['required', 'phone:AR,INTERNATIONAL', new ExistingCustomerWithPhone]
+          'phone_number' => ['required', 'phone:AR,INTERNATIONAL']
       ];
   }
 

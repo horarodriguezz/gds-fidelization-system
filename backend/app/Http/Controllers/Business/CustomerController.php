@@ -6,25 +6,66 @@ use App\Http\Requests\Business\Customers\CreateCustomerRequest;
 use App\Http\Requests\Business\Customers\GetPaginatedCustomersRequest;
 use App\Http\Requests\Business\Customers\UpdateCustomerRequest;
 use App\Models\Customer;
+use App\Models\CustomerBusiness;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller {
 
   public function create(CreateCustomerRequest $request): JsonResponse {
     $validated = $request->validated();
 
-    Log::info('Creating customer with data: ', $validated);
-
+    $user = $request->user();
     $phone_number = phone($validated['phone_number'], 'AR', 'INTERNATIONAL');
 
-    $customer = Customer::create([
-      'first_name' => $validated['first_name'],
-      'last_name' => $validated['last_name'] ?? null,
-      'email' => $validated['email'] ?? null,
-      'phone_number' => $phone_number
-    ]);
+    $customer = Customer::wherePhoneNumber($phone_number)->first();
+
+    if ($customer) {
+      $customerBusiness = CustomerBusiness::whereCustomerId($customer->id)
+        ->whereBusinessId($user->business_id)
+        ->first();
+
+      if ($customerBusiness && $customerBusiness->deleted_at === null) {
+        throwAppError('El número de teléfono pertenece a un cliente ya registrado.', 400, [
+          'customer' => $customerBusiness->customer->toResource()
+        ]);
+      } 
+
+      if ($customerBusiness && $customerBusiness->deleted_at !== null) {
+        $customerBusiness->restore();
+
+        return successResponse('Cliente creado exitosamente', ['customer' => $customer->toResource()], 201);
+      }
+
+      $customerBusiness = DB::transaction(function () use ($customer, $user) {
+        CustomerBusiness::create([
+          'business_id' => $user->business_id,
+          'customer_id' => $customer->id,
+          'cached_points' => 0
+        ]);
+      });
+
+      return successResponse('Cliente creado exitosamente', ['customer' => $customer->toResource()], 201);
+    }
+
+    $customer = DB::transaction(function () use ($validated, $phone_number, $user) {
+      $customer = Customer::create([
+        'first_name' => $validated['first_name'],
+        'last_name' => $validated['last_name'] ?? null,
+        'email' => $validated['email'] ?? null,
+        'phone_number' => $phone_number
+      ]);
+
+      CustomerBusiness::create([
+        'business_id' => $user->business_id,
+        'customer_id' => $customer->id,
+        'cached_points' => 0
+      ]);
+
+      return $customer;
+    });
+
 
     return successResponse('Cliente creado exitosamente', ['customer' => $customer], 201);
   }  
@@ -39,6 +80,8 @@ class CustomerController extends Controller {
     $lastVisitedBefore = $validated['last_visited_before'] ?? null;
 
     $query = Customer::query();
+
+    $query->whereDeletedAt(null);
 
     if ($search) {
       $query->where(function ($q) use ($search) {
