@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Business\AuthController as BusinessAuthController;
+use App\Http\Controllers\Business\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('business')->group(function () {
@@ -16,7 +17,9 @@ Route::prefix('business')->group(function () {
         Route::post('/logout', 'logout')->middleware('auth:sanctum');
     });
 
-    Route::prefix('customers')->controller(CustomerController::class)->group(function () {
-        Route::post('/', 'create')->middleware('auth:sanctum');
+    Route::prefix('customers')->controller(CustomerController::class)->middleware('auth:sanctum')->group(function () {
+        Route::post('/', 'createCustomer');
+
+        Route::get('/', 'getPaginated');
     });
 });

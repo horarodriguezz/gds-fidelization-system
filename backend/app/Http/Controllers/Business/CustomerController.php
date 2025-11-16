@@ -30,7 +30,7 @@ class CustomerController extends Controller {
     $validated = $request->validated();
 
     $page = $validated['page'] ?? 1;
-    $perPage = $validated['per_page'] ?? 15;
+    $perPage = $validated['per_page'] ?? 10;
     $search = $validated['search'] ?? null;
     $lastVisitedAfter = $validated['last_visited_after'] ?? null;
     $lastVisitedBefore = $validated['last_visited_before'] ?? null;

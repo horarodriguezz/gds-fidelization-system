@@ -2,6 +2,7 @@
 
 use App\Enums\ErrorSubCode;
 use App\Exceptions\AppException;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 if (!function_exists('throwAppError')) {
     /**
@@ -35,6 +36,35 @@ if (!function_exists('successResponse')) {
             'message' => $message,
             'status' => $code,
             'data' => $data,
+        ], $code);
+    }
+}
+
+if (!function_exists('paginatedResponse')) {
+    /**
+     * Devuelve una respuesta JSON paginada con formato estándar.
+     *
+     * @param string|null $message  Mensaje descriptivo.
+     * @param LengthAwarePaginator $paginator Paginador de datos.
+     * @param int $code        Código HTTP (por defecto 200).
+     */
+    function paginatedResponse(?string $message, LengthAwarePaginator $paginator, ?int $code = 200)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'status' => $code,
+            'data' => $paginator->items(),
+            'pagination' => [
+                'total' => $paginator->total(),
+                'perPage' => $paginator->perPage(),
+                'currentPage' => $paginator->currentPage(),
+                'lastPage' => $paginator->lastPage(),
+                'from' => $paginator->firstItem(),
+                'to' => $paginator->lastItem(),
+                'hasNextPage' => $paginator->hasMorePages(),
+                'hasPreviousPage' => $paginator->currentPage() > 1
+            ],
         ], $code);
     }
 }
