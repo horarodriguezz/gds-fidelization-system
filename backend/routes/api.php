@@ -21,5 +21,7 @@ Route::prefix('business')->group(function () {
         Route::post('/', 'createCustomer');
 
         Route::get('/', 'getPaginated');
+
+        Route::put('/{customer}', 'update');
     });
 });

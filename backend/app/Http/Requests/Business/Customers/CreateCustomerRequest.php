@@ -9,9 +9,9 @@ class CreateCustomerRequest extends FormRequest {
   public function rules(): array {
       return [
           'first_name' => 'required|string|max:50',
-          'last_name' => 'string|max:100|nullable',
+          'last_name' => 'string|max:50|nullable',
           'email' => 'string|email|max:200|unique:customers,email|nullable',
-          'phone_number' => 'required|string|max:20|unique:customers,phone_number'
+          'phone_number' => 'phone:AR,INTERNATTIONAL|required|unique:customers,phone_number'
       ];
   }
 
@@ -26,9 +26,8 @@ class CreateCustomerRequest extends FormRequest {
           'email.email' => 'El email no tiene un formato valido.',
           'email.unique' => 'El email pertenece a un cliente ya registrado.',
           'email.max' => 'El email no debe superar los 200 caracteres.',
+          'phone_number.phone' => 'El número de teléfono no tiene un formato valido.',
           'phone_number.required' => 'El número de teléfono es obligatorio.',
-          'phone_number.string' => 'El número de teléfono debe ser una cadena de texto.',
-          'phone_number.max' => 'El número de teléfono no debe superar los 20 caracteres.',
           'phone_number.unique' => 'El número de teléfono pertenece a un cliente ya registrado.'
       ];
   }
