@@ -40,7 +40,7 @@ class Customer extends Model
 {
     use HasUuids;
 
-    protected $fillable = ['name', 'phone_number', 'profile_picture', 'email'];
+    protected $fillable = ['first_name', 'last_name', 'phone_number', 'profile_picture', 'email'];
 
     public function businesses(): BelongsToMany {
         return $this->belongsToMany(Business::class, 'customer_business')
