@@ -18,10 +18,12 @@ Route::prefix('business')->group(function () {
     });
 
     Route::prefix('customers')->controller(CustomerController::class)->middleware('auth:sanctum')->group(function () {
-        Route::post('/', 'createCustomer');
+        Route::post('/', 'create');
 
-        Route::get('/', 'getPaginated');
+        Route::get('/', 'get');
 
         Route::put('/{customer}', 'update');
+
+        Route::delete('/{customer}', 'delete');
     });
 });

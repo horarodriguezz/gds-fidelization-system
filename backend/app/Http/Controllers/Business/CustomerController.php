@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller {
 
-  public function createCustomer(CreateCustomerRequest $request): JsonResponse {
+  public function create(CreateCustomerRequest $request): JsonResponse {
     $validated = $request->validated();
 
     Log::info('Creating customer with data: ', $validated);
@@ -29,7 +29,7 @@ class CustomerController extends Controller {
     return successResponse('Cliente creado exitosamente', ['customer' => $customer], 201);
   }  
 
-  public function getPaginated(GetPaginatedCustomersRequest $request) {
+  public function get(GetPaginatedCustomersRequest $request) {
     $validated = $request->validated();
 
     $page = $validated['page'] ?? 1;
@@ -95,5 +95,11 @@ class CustomerController extends Controller {
     $customer->save();
 
     return successResponse('Cliente actualizado exitosamente', ['customer' => $customer]);
+  }
+
+  public function delete(Customer $customer): JsonResponse {
+    $customer->delete();
+
+    return successResponse('Cliente eliminado exitosamente', null);
   }
 }
