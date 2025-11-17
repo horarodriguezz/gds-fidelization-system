@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
@@ -39,8 +40,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Customer extends Model
 {
     use HasUuids;
+    use SoftDeletes;
 
-    protected $fillable = ['name', 'phone_number', 'profile_picture', 'email'];
+    protected $fillable = ['first_name', 'last_name', 'phone_number', 'phone_validated_at', 'profile_picture', 'email'];
 
     public function businesses(): BelongsToMany {
         return $this->belongsToMany(Business::class, 'customer_business')
@@ -58,5 +60,15 @@ class Customer extends Model
 
     public function pointsLedger(): HasMany {
         return $this->hasMany(PointsLedger::class);
+    }
+
+    /**
+     * Check if the customer's phone number has been validated
+     * 
+     * If the customer is validated it means that the customer itself has registered
+     * into the application.
+     */
+    public function isAlreadyValidated(): bool {
+        return !is_null($this->phone_validated_at);
     }
 }

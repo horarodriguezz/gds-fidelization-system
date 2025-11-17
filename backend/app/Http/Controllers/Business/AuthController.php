@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Business;
 
-use App\DTOs\LoginError;
 use App\Enums\ErrorSubCode;
 use App\Enums\Role;
-use App\Http\Requests\Auth\Business\PostLoginRequest;
-use App\Http\Requests\Auth\Business\PostRegisterRequest as BusinessPostRegisterRequest;
-use App\Http\Requests\Auth\Business\PostRevalidateEmailRequest;
 use App\Models\Business;
 use App\Models\LoyaltyConfig;
 use App\Models\User;
@@ -17,8 +13,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Log;
+use App\Http\Requests\Business\Auth\PostRegisterRequest as BusinessPostRegisterRequest;
+use App\Http\Requests\Business\Auth\PostLoginRequest;
+use App\Http\Requests\Business\Auth\PostRevalidateEmailRequest;
 use Request;
 
 class AuthController extends Controller

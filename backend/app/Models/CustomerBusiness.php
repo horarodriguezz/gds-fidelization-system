@@ -1,7 +1,10 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $business_id
@@ -21,6 +24,17 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class CustomerBusiness extends Pivot
 {
+    use SoftDeletes;
+
     protected $table = 'customer_business';
     protected $fillable = ['business_id', 'customer_id', 'cached_points'];
+
+    public function business(): BelongsTo {
+        return $this->belongsTo(Business::class, 'business_id', 'id');
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }
