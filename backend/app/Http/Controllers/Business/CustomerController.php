@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Business;
 
+use App\Enums\ErrorSubCode;
 use App\Http\Requests\Business\Customers\CreateCustomerRequest;
 use App\Http\Requests\Business\Customers\GetPaginatedCustomersRequest;
 use App\Http\Requests\Business\Customers\UpdateCustomerRequest;
@@ -33,7 +34,7 @@ class CustomerController extends Controller {
       if ($customerBusiness && $customerBusiness->deleted_at === null) {
         throwAppError('El número de teléfono pertenece a un cliente ya registrado.', 400, [
           'customer' => $customerBusiness->customer->toResource()
-        ]);
+        ], ErrorSubCode::PHONE_NUMBER_ALREADY_USED_BY_ANOTHER_CUSTOMER);
       } 
 
       if ($customerBusiness && $customerBusiness->deleted_at !== null) {
@@ -81,12 +82,10 @@ class CustomerController extends Controller {
     $lastVisitedAfter = $validated['last_visited_after'] ?? null;
     $lastVisitedBefore = $validated['last_visited_before'] ?? null;
 
-    $query = Customer::query();
-
-    $query->whereDeletedAt(null);
+    $query = CustomerBusiness::query();
 
     if ($search) {
-      $query->where(function ($q) use ($search) {
+      $query->whereHas('customer', function ($q) use ($search) {
         $q->where('first_name', 'like', '%' . $search . '%')
           ->orWhere('last_name', 'like', '%' . $search . '%')
           ->orWhere('email', 'like', '%' . $search . '%')
@@ -95,14 +94,18 @@ class CustomerController extends Controller {
     }
 
     if ($lastVisitedAfter) {
-      $query->where('last_visited_at', '>=', $lastVisitedAfter);
+      $query->whereHas('customer', function ($q) use ($lastVisitedAfter) {
+        $q->where('updated_at', '>=', $lastVisitedAfter);
+      });
     }
 
     if ($lastVisitedBefore) {
-      $query->where('last_visited_at', '<=', $lastVisitedBefore);
+      $query->whereHas('customer', function ($q) use ($lastVisitedBefore) {
+        $q->where('updated_at', '<=', $lastVisitedBefore);
+      });
     }
 
-    $customers = $query->paginate($perPage, ['*'], 'page', $page);
+    $customers = $query->with('customer')->paginate($perPage, ['*'], 'page', $page);
 
     return paginatedResponse('Clientes obtenidos exitosamente', $customers);
   }
@@ -110,17 +113,18 @@ class CustomerController extends Controller {
   public function update(UpdateCustomerRequest $request, Customer $customer): JsonResponse {
     $validated = $request->validated();
 
-    $wantToUpdatePhoneNumber = isset($validated['phone_number']);
+    if ($customer->isAlreadyValidated()) {
+      throwAppError('No puedes modificar un cliente que se ha registrado en la aplicación.', 400, [
+        'title' => 'Cliente registrado en la app',
+        'message' => 'El cliente ' . $customer->first_name . ' ' . $customer->last_name . ' se ha registrado en la aplicación y por lo tanto solo él puede modificar sus datos.',
+        'customer' => $customer->toResource()       
+      ], ErrorSubCode::CUSTOMER_ALREADY_VERIFIED);
+    }
 
     /**
      * If the customer has already validated their phone number, only him can update it
      */
-    if ($wantToUpdatePhoneNumber && $customer->isAlreadyValidated()) {
-      throwAppError('No puedes modificar el número de teléfono de un cliente que se ha registrado en la aplicación.', 400, [
-        'customer_id' => $customer->id,
-        'phone_number' => $customer->phone_number
-      ]);
-    } elseif ($wantToUpdatePhoneNumber) {
+    if (isset($validated['phone_number'])) {
       $phone_number = phone($validated['phone_number'], 'AR', 'INTERNATIONAL');
       $customer->phone_number = $phone_number;
     }

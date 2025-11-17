@@ -54,7 +54,9 @@ if (!function_exists('paginatedResponse')) {
             'success' => true,
             'message' => $message,
             'status' => $code,
-            'data' => $paginator->items(),
+            'data' => method_exists($paginator, 'toResourceCollection') 
+                ? $paginator->toResourceCollection() 
+                : $paginator->items(),
             'pagination' => [
                 'total' => $paginator->total(),
                 'perPage' => $paginator->perPage(),
