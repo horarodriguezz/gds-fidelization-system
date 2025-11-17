@@ -8,8 +8,10 @@ use App\Http\Requests\Business\Customers\UpdateCustomerRequest;
 use App\Models\Customer;
 use App\Models\CustomerBusiness;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller {
 
@@ -22,9 +24,11 @@ class CustomerController extends Controller {
     $customer = Customer::wherePhoneNumber($phone_number)->first();
 
     if ($customer) {
-      $customerBusiness = CustomerBusiness::whereCustomerId($customer->id)
-        ->whereBusinessId($user->business_id)
-        ->first();
+      $query = CustomerBusiness::where('business_id', $user->business_id)
+        ->where('customer_id', $customer->id)
+        ->withTrashed();
+        
+      $customerBusiness = $query->first();
 
       if ($customerBusiness && $customerBusiness->deleted_at === null) {
         throwAppError('El número de teléfono pertenece a un cliente ya registrado.', 400, [
@@ -33,18 +37,16 @@ class CustomerController extends Controller {
       } 
 
       if ($customerBusiness && $customerBusiness->deleted_at !== null) {
-        $customerBusiness->restore();
+        $query->restore();
 
         return successResponse('Cliente creado exitosamente', ['customer' => $customer->toResource()], 201);
       }
 
-      $customerBusiness = DB::transaction(function () use ($customer, $user) {
-        CustomerBusiness::create([
+      $customerBusiness = CustomerBusiness::create([
           'business_id' => $user->business_id,
           'customer_id' => $customer->id,
           'cached_points' => 0
         ]);
-      });
 
       return successResponse('Cliente creado exitosamente', ['customer' => $customer->toResource()], 201);
     }
@@ -140,8 +142,21 @@ class CustomerController extends Controller {
     return successResponse('Cliente actualizado exitosamente', ['customer' => $customer]);
   }
 
-  public function delete(Customer $customer): JsonResponse {
-    $customer->delete();
+  public function deleteCustomerRelation(Request $request, string $customerId): JsonResponse {
+    $businessId = $request->user()->business_id;
+
+    $query = CustomerBusiness::where('business_id', $businessId)
+      ->where('customer_id', $customerId);
+
+    $customerBusiness = $query->first();
+
+    if (!$customerBusiness) {
+        throwAppError('No hemos encontrado un cliente con el ID especificado.', 404, [
+            'customer_id' => $customerId
+        ]);
+    }
+
+    $query->delete();
 
     return successResponse('Cliente eliminado exitosamente', null);
   }

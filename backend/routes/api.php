@@ -24,6 +24,6 @@ Route::prefix('business')->group(function () {
 
         Route::put('/{customer}', 'update');
 
-        Route::delete('/{customer}', 'delete');
+        Route::delete('/{customerId}', 'deleteCustomerRelation');
     });
 });
