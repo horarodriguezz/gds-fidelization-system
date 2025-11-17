@@ -21,6 +21,11 @@ export class AxiosHttpClient implements HttpClient {
 
   private setupInterceptors() {
     this.client.interceptors.request.use((config) => {
+      // validate if "localStorage" is available
+      if (typeof localStorage === "undefined") {
+        return config;
+      }
+
       const token = localStorage.getItem(BUSINESS_TOKEN_KEY);
 
       if (token) {
