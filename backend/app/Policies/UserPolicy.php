@@ -27,4 +27,8 @@ class UserPolicy
     public function deleteUser(User $user): bool {
         return in_array($user->role, [Role::OWNER->value]);
     }
+
+    public function updateUser(User $user): bool {
+        return in_array($user->role, [Role::OWNER->value]);
+    }
 }

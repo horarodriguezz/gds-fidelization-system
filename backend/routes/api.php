@@ -40,5 +40,7 @@ Route::prefix('business')->group(function () {
         Route::post('/', 'create');
 
         Route::delete('/{userId}', 'delete');
+
+        Route::put('/{user}', 'update');
     });
 });
