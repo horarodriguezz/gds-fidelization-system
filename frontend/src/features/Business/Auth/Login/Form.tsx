@@ -11,7 +11,7 @@ import { BusinessService } from "@/api/business/business.service";
 import { Spinner } from "@/components/ui/spinner";
 import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
-import { Pathname } from "../../../../config/pathname";
+import { Pathname } from "../../../../config/Pathname2";
 import { APP_NAME } from "../../../../config/app";
 import { HttpStatusCode } from "axios";
 import type { LoginResponseData } from "../../../../api/business/business.types";

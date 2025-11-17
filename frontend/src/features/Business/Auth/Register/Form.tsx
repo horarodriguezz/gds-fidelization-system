@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
 import { registerData } from "@/store/auth";
-import { Pathname } from "../../../../config/pathname";
+import { Pathname } from "../../../../config/Pathname2";
 import { APP_NAME } from "../../../../config/app";
 
 const schema = z.object({
