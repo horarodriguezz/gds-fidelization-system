@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { CircleCheck, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Pathname } from "../../../../config/pathname";
+import { Pathname } from "../../../../config/Pathname";
 
 function SuccessDialog() {
   const data = useStore(registerData);

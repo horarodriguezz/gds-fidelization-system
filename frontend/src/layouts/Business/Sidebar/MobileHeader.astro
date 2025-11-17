@@ -1,0 +1,26 @@
+---
+import { Store } from "@lucide/astro";
+
+import MobileSidebar from "./MobileSidebar";
+import AppSidebar from "./Sidebar.astro";
+---
+
+<header
+  class='sticky top-0 z-50 flex h-16 items-center justify-between border-b border-sidebar-border bg-background px-4 lg:hidden'
+>
+  <div class='flex items-center gap-2'>
+    <div
+      class='flex h-10 w-10 items-center justify-center rounded-lg bg-sidebar-primary'
+    >
+      <Store class='h-6 w-6 text-sidebar-primary-foreground' />
+    </div>
+    <div class='flex flex-col'>
+      <span class='text-base font-semibold'>FideliApp</span>
+      <span class='text-xs text-muted-foreground'>Sistema de puntos</span>
+    </div>
+  </div>
+
+  <MobileSidebar client:load>
+    <AppSidebar />
+  </MobileSidebar>
+</header>
