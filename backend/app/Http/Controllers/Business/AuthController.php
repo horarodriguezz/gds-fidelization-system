@@ -31,7 +31,7 @@ class AuthController extends Controller
 
             return User::create([
                 'business_id' => $business['id'],
-                'role' => Role::ADMIN,
+                'role' => Role::OWNER,
                 'email' => $validated['email'],
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
