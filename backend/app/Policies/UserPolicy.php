@@ -24,6 +24,8 @@ class UserPolicy
         return in_array($user->role, [Role::OWNER->value, Role::ADMIN->value]);
     }
 
-
+    public function createUser(User $user): bool {
+        return in_array($user->role, [Role::OWNER->value, Role::ADMIN->value]);
+    }
 
 }
