@@ -17,10 +17,6 @@ class UserPolicy
     }
 
     public function getUsers(User $user): bool {
-        Log::info('User role', ['role' => $user->role]);
-        Log::info(in_array($user->role, [Role::OWNER, Role::ADMIN]) ? 'Role is authorized' : 'Role is not authorized');
-        Log::info('Authorized roles', ['roles' => [Role::OWNER, Role::ADMIN]]);
-
         return in_array($user->role, [Role::OWNER->value, Role::ADMIN->value]);
     }
 
@@ -28,4 +24,7 @@ class UserPolicy
         return in_array($user->role, [Role::OWNER->value, Role::ADMIN->value]);
     }
 
+    public function deleteUser(User $user): bool {
+        return in_array($user->role, [Role::OWNER->value]);
+    }
 }

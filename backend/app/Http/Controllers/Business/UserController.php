@@ -41,4 +41,15 @@ class UserController extends Controller {
 
     return successResponse('Usuario creado exitosamente', ['user' => $newUser->toResource()], 201);
   }
+
+  public function delete(Request $request, string $userId) {
+    $user = $request->user();
+
+    Gate::authorize('deleteUser', $user);
+
+    $userToDelete = User::whereBusinessId($user->business_id)->whereId($userId)->firstOrFail();
+    $userToDelete->delete();
+
+    return successResponse('Usuario eliminado exitosamente');
+  }
 }

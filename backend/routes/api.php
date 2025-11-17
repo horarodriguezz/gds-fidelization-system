@@ -38,5 +38,7 @@ Route::prefix('business')->group(function () {
         Route::get('/', 'getUsers');
 
         Route::post('/', 'create');
+
+        Route::delete('/{userId}', 'delete');
     });
 });
