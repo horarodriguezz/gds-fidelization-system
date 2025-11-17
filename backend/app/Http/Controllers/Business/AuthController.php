@@ -145,6 +145,20 @@ class AuthController extends Controller
     }
 
     public function validateInvitationLink(User $user) {
+        if (!$user) {
+            $title = 'Enlace inválido';
+            $message = 'El enlace de invitación no es válido.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
+        if ($user->email_verified_at !== null || $user->password !== null) {
+            $title = 'Enlace inválido';
+            $message = 'El enlace de invitación ya ha sido utilizado.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
         return successResponse('Link válido', [
             'user' => $user->toResource()
         ]);

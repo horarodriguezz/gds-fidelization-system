@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import { BusinessService } from "../api/business/business.service";
+import type { ApiError } from "../api/types/Error";
 import { Card, CardContent } from "../components/ui/card";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Form from "@/features/Business/Auth/CompleteRegistration/Form";
@@ -24,12 +25,17 @@ try {
   );
 
   user = response.data.user;
-} catch (error) {
+} catch (error: unknown) {
+  const e = error as ApiError;
+
+  const {
+    title = "El enlace de registro no es válido",
+    message = "Por favor, verifica el enlace e intenta nuevamente.",
+  } = e?.data || {};
+
   const redirectUrl = `/auth/verify?success=false&title=${encodeURIComponent(
-    "El enlace de registro no es válido"
-  )}&message=${encodeURIComponent(
-    "Por favor, verifica el enlace e intenta nuevamente."
-  )}`;
+    title
+  )}&message=${encodeURIComponent(message)}`;
 
   return Astro.redirect(redirectUrl);
 }

@@ -85,6 +85,21 @@ function Form({ user, signature, expires }: Props) {
       );
   };
 
+  const handleError = (error: ApiError) => {
+    if (error.status === 422 && error.data?.errors) {
+      const fieldErrors = error.data.errors;
+
+      fieldErrors.forEach((e: any) => {
+        form.setError(e.field as keyof z.infer<typeof schema>, {
+          type: "server",
+          message: e.message,
+        });
+      });
+    } else {
+      toast.error(error.data?.message || "Error al completar el registro");
+    }
+  };
+
   const onSubmit = (data: z.infer<typeof schema>) => {
     if (isLoading) {
       return;
@@ -94,14 +109,10 @@ function Form({ user, signature, expires }: Props) {
 
     setIsLoading(true);
 
-    console.log("Submitting data:", data);
-
     service
       .completeUserRegistration(user.id, signature, expires, data)
       .then(handleSuccess)
-      .catch((error: ApiError) =>
-        toast.error(error.data?.message || "Error al completar el registro")
-      )
+      .catch(handleError)
       .finally(() => {
         setIsLoading(false);
       });
@@ -246,7 +257,7 @@ function Form({ user, signature, expires }: Props) {
                   id='password'
                   type='password'
                   aria-invalid={fieldState.invalid}
-                  placeholder='••••••••'
+                  placeholder='Contraseña segura'
                   autoComplete='off'
                 />
 
@@ -273,7 +284,7 @@ function Form({ user, signature, expires }: Props) {
                   id='password_confirmation'
                   type='password'
                   aria-invalid={fieldState.invalid}
-                  placeholder='••••••••'
+                  placeholder='Contraseña segura'
                   autoComplete='off'
                 />
 
