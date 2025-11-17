@@ -6,6 +6,7 @@ import {
   Settings,
   ShoppingCart,
   Store,
+  UserCog,
   Users,
 } from "@lucide/astro";
 import { Pathname } from "@/config/Pathname";
@@ -39,6 +40,11 @@ const navigation = [
     name: "Recompensas",
     href: Pathname.BUSINESS_REWARDS,
     icon: Gift,
+  },
+  {
+    name: "Usuarios",
+    href: Pathname.BUSINESS_USERS,
+    icon: UserCog,
   },
   {
     name: "Configuración",

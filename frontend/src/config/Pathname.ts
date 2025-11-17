@@ -6,4 +6,5 @@ export enum Pathname {
   BUSINESS_SALES = "/business/sales",
   BUSINESS_REWARDS = "/business/rewards",
   BUSINESS_SETTINGS = "/business/settings",
+  BUSINESS_USERS = "/business/users",
 }

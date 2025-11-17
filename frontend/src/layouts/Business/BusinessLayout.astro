@@ -2,6 +2,12 @@
 import BaseLayout from "../BaseLayout.astro";
 import MobileHeader from "./Sidebar/MobileHeader.astro";
 import AppSidebar from "./Sidebar/Sidebar.astro";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
 ---
 
 <script>
@@ -18,7 +24,7 @@ import AppSidebar from "./Sidebar/Sidebar.astro";
   }
 </script>
 
-<BaseLayout>
+<BaseLayout title={title}>
   <div class='flex min-h-screen flex-col lg:flex-row'>
     <MobileHeader />
 
