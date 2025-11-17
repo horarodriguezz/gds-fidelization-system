@@ -60,7 +60,7 @@ export class BusinessService {
     >(
       `${
         this.resource
-      }/user/complete-registration/${userId}?signature=${encodeURIComponent(
+      }/auth/complete-registration/${userId}?signature=${encodeURIComponent(
         signature
       )}&expires=${encodeURIComponent(expires)}`
     );
@@ -75,7 +75,7 @@ export class BusinessService {
     data: CompleteRegistrationForm
   ): Promise<void> {
     const response = await httpClient.post<void>(
-      `${this.resource}/user/complete-registration/${userId}`,
+      `${this.resource}/auth/complete-registration/${userId}`,
       data,
       { params: { signature, expires } }
     );

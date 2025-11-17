@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Business\Auth\PostRegisterRequest;
 use App\Http\Requests\Business\Auth\PostLoginRequest;
 use App\Http\Requests\Business\Auth\PostRevalidateEmailRequest;
+use App\Http\Requests\Business\Users\ConfirmateUserRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -140,5 +141,32 @@ class AuthController extends Controller
         $user = $request->user();
 
         return successResponse('Usuario autenticado obtenido exitosamente', ['user' => $user->toResource()]);
+    
     }
+
+    public function validateInvitationLink(User $user) {
+        return successResponse('Link válido', [
+            'user' => $user->toResource()
+        ]);
+    }
+
+    public function completeRegistration(ConfirmateUserRequest $request, User $user): JsonResponse {
+        $validated = $request->validated(); 
+        
+        $user->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
+            'password' => bcrypt($validated['password']),
+        ]);
+        
+        // Marcar email como verificado
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        return successResponse('Registro completado exitosamente');
+    }
+
 }
