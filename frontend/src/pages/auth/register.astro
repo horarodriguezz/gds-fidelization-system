@@ -1,0 +1,35 @@
+---
+import AuthLayout from "../../layouts/Auth/AuthLayout.astro";
+import type { CardProps } from "../../layouts/Auth/Card.astro";
+import { Award, TrendingUp, Users } from "@lucide/astro";
+import Form from "@/features/Business/Auth/Register/Form";
+import SuccessConfirmation from "@/features/Business/Auth/Register/Dialog";
+
+const cards: [CardProps, CardProps, CardProps] = [
+  {
+    icon: Users,
+    title: "Gestión de clientes",
+    description: "Control total de tu base de clientes",
+  },
+  {
+    icon: TrendingUp,
+    title: "Análisis en tiempo real",
+    description: "Métricas y estadísticas detalladas",
+  },
+  {
+    icon: Award,
+    title: "Recompensas personalizadas",
+    description: "Crea beneficios únicos para tu negocio",
+  },
+];
+---
+
+<AuthLayout
+  cards={cards}
+  title='Comienza a fidelizar clientes hoy mismo'
+  description='Únete a cientos de negocios que ya están aumentando sus ventas y mejorando la retención de clientes con nuestro sistema de puntos.'
+>
+  <Form client:only />
+
+  <SuccessConfirmation client:load />
+</AuthLayout>

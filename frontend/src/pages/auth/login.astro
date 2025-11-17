@@ -1,0 +1,35 @@
+---
+import AuthLayout from "../../layouts/Auth/AuthLayout.astro";
+import type { CardProps } from "../../layouts/Auth/Card.astro";
+import { Award, TrendingUp, Users } from "@lucide/astro";
+import Form from "@/features/Business/Auth/Login/Form";
+import NotVerifyPopup from "../../features/Business/Auth/Login/NotVerifyPopup";
+
+const cards: [CardProps, CardProps, CardProps] = [
+  {
+    icon: Users,
+    title: "Gestión de clientes",
+    description: "Control total de tu base de clientes",
+  },
+  {
+    icon: TrendingUp,
+    title: "Análisis en tiempo real",
+    description: "Métricas y estadísticas detalladas",
+  },
+  {
+    icon: Award,
+    title: "Recompensas personalizadas",
+    description: "Crea beneficios únicos para tu negocio",
+  },
+];
+---
+
+<AuthLayout
+  cards={cards}
+  title='Fideliza a tus clientes y haz crecer tu negocio'
+  description='Sistema de puntos y recompensas diseñado para pequeños comercios. Aumenta la retención de clientes y mejora tus ventas.'
+>
+  <Form client:load />
+
+  <NotVerifyPopup client:load />
+</AuthLayout>

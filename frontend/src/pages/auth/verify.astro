@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailVerifyResult from "../../features/Business/Auth/EmailVerifyResult/EmailVerifyResult.astro";
+
+const url = Astro.url;
+
+const params = url.searchParams;
+---
+
+<BaseLayout title='Verificación de cuenta'>
+  <EmailVerifyResult
+    success={params.get("success") === "true"}
+    title={params.get("title") || ""}
+    message={params.get("message") || ""}
+  />
+</BaseLayout>
