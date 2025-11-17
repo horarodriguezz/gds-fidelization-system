@@ -135,4 +135,10 @@ class AuthController extends Controller
 
         return successResponse('Cierre de sesión exitoso');
     }
+    
+    public function me(Request $request): JsonResponse {
+        $user = $request->user();
+
+        return successResponse('Usuario autenticado obtenido exitosamente', ['user' => $user->toResource()]);
+    }
 }

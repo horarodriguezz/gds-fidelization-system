@@ -15,6 +15,8 @@ Route::prefix('business')->group(function () {
         Route::post('/revalidate-email', 'revalidateEmail');
 
         Route::post('/logout', 'logout')->middleware('auth:sanctum');
+
+        Route::get('/me', 'me')->middleware('auth:sanctum');
     });
 
     Route::prefix('customers')->controller(CustomerController::class)->middleware('auth:sanctum')->group(function () {
