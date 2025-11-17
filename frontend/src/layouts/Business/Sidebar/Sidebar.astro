@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { BusinessService } from "../../../api/business/business.service";
 import { APP_NAME } from "../../../config/app";
 import { BUSINESS_TOKEN_KEY } from "../../../config/localStorage";
+import LogoutButton from "./LogoutButton";
 
 interface Props {
   onNavigate?: () => void;
@@ -57,9 +58,9 @@ function handleLogout() {
   const service = new BusinessService();
 
   service.logout().then(() => {
-    window.location.href = Pathname.LOGIN;
-
     localStorage.removeItem(BUSINESS_TOKEN_KEY);
+
+    window.location.href = Pathname.LOGIN;
   });
 }
 ---
@@ -109,15 +110,8 @@ function handleLogout() {
     </nav>
 
     {/* Footer */}
-    <div class='border-t border-sidebar-border p-4 space-y-3'>
-      <Button
-        variant='ghost'
-        onClick={handleLogout}
-        className='w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-      >
-        <LogOut class='h-5 w-5' />
-        Cerrar sesión
-      </Button>
+    <div class='border-t border-sidebar-border p-4'>
+      <LogoutButton client:visible />
 
       <div
         class='flex items-center gap-3 rounded-lg bg-sidebar-accent/50 px-3 py-2.5'

@@ -1,6 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { HttpClient, HttpRequestConfig } from "./HttpClient";
 import axios from "axios";
+import { BUSINESS_TOKEN_KEY } from "../../config/localStorage";
 
 export class AxiosHttpClient implements HttpClient {
   private client: AxiosInstance;
@@ -20,7 +21,7 @@ export class AxiosHttpClient implements HttpClient {
 
   private setupInterceptors() {
     this.client.interceptors.request.use((config) => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem(BUSINESS_TOKEN_KEY);
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;

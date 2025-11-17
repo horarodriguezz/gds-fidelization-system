@@ -13,14 +13,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Business\Auth\PostRegisterRequest as BusinessPostRegisterRequest;
+use App\Http\Requests\Business\Auth\PostRegisterRequest;
 use App\Http\Requests\Business\Auth\PostLoginRequest;
 use App\Http\Requests\Business\Auth\PostRevalidateEmailRequest;
-use Request;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function register(BusinessPostRegisterRequest $request): JsonResponse
+    public function register(PostRegisterRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
