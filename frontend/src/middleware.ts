@@ -12,7 +12,6 @@ export const onRequest = defineMiddleware((context, next) => {
   );
 
   const token = context.cookies.get(CookieName.BUSINESS_TOKEN);
-  const userCookie = context.cookies.get(CookieName.USER);
 
   const isAuthenticated = token !== undefined;
 
@@ -32,24 +31,13 @@ export const onRequest = defineMiddleware((context, next) => {
     return Response.redirect(new URL(Pathname.LOGIN, context.url).toString());
   }
 
-  const hasUser = userCookie !== undefined && userCookie.value !== "";
-
-  if (hasUser) {
-    context.locals.user = JSON.parse(decodeURIComponent(userCookie.value));
-  }
-
-  if (isBusinessAppRequest && !hasUser) {
+  if (isBusinessAppRequest) {
     const service = new AuthService();
 
     return service
       .getMyInfo()
       .then((response) => {
         context.locals.user = response.data.user;
-        context.cookies.set(
-          CookieName.USER,
-          encodeURIComponent(JSON.stringify(response.data.user))
-        );
-
         return next();
       })
       .catch(() => {
