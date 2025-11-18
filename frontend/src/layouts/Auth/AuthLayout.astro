@@ -10,7 +10,7 @@ interface Props {
 
   description: string;
 
-  cards?: [CardProps, CardProps, CardProps];
+  cards: [CardProps, CardProps, CardProps];
 }
 
 const { title, description, cards } = Astro.props;
@@ -75,13 +75,13 @@ const { title, description, cards } = Astro.props;
           <slot name='extraContent' />
         </div>
       </div>
+    </div>
 
-      <!-- Right side - Registration form (slot) -->
-      <div
-        class='w-full lg:w-[30%] flex items-center p-8 bg-background'
-      > 
-        <slot />
-      </div>
+    <!-- Right side - Registration form (slot) -->
+    <div
+      class='w-full lg:w-[30%] flex items-center justify-center p-8 bg-background'
+    >
+      <slot />
     </div>
   </div>
 </BaseLayout>
