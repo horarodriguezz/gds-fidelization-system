@@ -9,6 +9,7 @@ import { Role } from "../../../../api/types/Enums/Role";
 import getRoleName from "../../../../lib/utils/getRoleName";
 import { Button } from "../../../../components/ui/button";
 import { CookieName } from "../../../../config/cookies";
+import Actions from "./Actions";
 
 export const columns: ColumnDef<UserModel>[] = [
   {
@@ -99,18 +100,10 @@ export const columns: ColumnDef<UserModel>[] = [
   {
     accessorKey: "actions",
     header: "Acciones",
-    cell: () => {
-      return (
-        <div className='flex items-center justify-end gap-2'>
-          <Button variant='ghost' size='sm'>
-            <Pencil className='h-4 w-4' />
-          </Button>
+    cell: ({ row }) => {
+      const user = row.original;
 
-          <Button variant='ghost' size='sm'>
-            <Trash2 className='h-4 w-4 text-destructive' />
-          </Button>
-        </div>
-      );
+      return <Actions user={user} />;
     },
   },
 ];

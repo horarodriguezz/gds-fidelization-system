@@ -6,10 +6,15 @@ import Header from "./Header";
 import CreateButton from "./CreateButton";
 import Loading from "./Loading";
 import Content from "./Content/Content";
+import UserPopup from "./Popup/UserPopup";
+import { useStore } from "@nanostores/react";
+import { userPopupData } from "../../../store/business/users";
 
 const service = new UsersService();
 
 function Users() {
+  const popupdata = useStore(userPopupData);
+
   const {
     data: response,
     error,
@@ -29,6 +34,8 @@ function Users() {
       </Header>
 
       {isLoading ? <Loading /> : <Content data={response?.data.users || []} />}
+
+      {popupdata.isOpen && <UserPopup />}
     </div>
   );
 }

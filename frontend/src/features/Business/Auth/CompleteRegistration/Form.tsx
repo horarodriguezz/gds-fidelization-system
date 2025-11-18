@@ -55,10 +55,6 @@ interface Props {
 }
 
 function Form({ user, signature, expires }: Props) {
-  console.log("User in CompleteRegistration Form:", user);
-  console.log("Signature in CompleteRegistration Form:", signature);
-  console.log("Expires in CompleteRegistration Form:", expires);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
