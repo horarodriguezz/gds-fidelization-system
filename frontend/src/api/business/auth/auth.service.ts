@@ -1,19 +1,24 @@
-import { httpClient } from "../http";
-import type { SuccessResponse } from "../types/Response";
+import { httpClient } from "../../http";
+import { Service } from "../../http/Service";
+import type { UserModel } from "../../types/Models/User";
+import type { SuccessResponse } from "../../types/Response";
 import type {
   CompleteRegistrationForm,
   LoginForm,
   LoginResponseData,
+  MyInfoResponse,
   RegisterForm,
   ValidateUserRegistrationLinkResponse,
-} from "./business.types";
+} from "./auth.types";
 
-export class BusinessService {
-  private resource = "/business";
+export class AuthService extends Service {
+  constructor() {
+    super(httpClient, "/business/auth");
+  }
 
   public async register(data: RegisterForm): Promise<SuccessResponse> {
-    const response = await httpClient.post<SuccessResponse, RegisterForm>(
-      `${this.resource}/auth/register`,
+    const response = await this.client.post<SuccessResponse, RegisterForm>(
+      `${this.resource}/register`,
       data
     );
 
@@ -23,10 +28,10 @@ export class BusinessService {
   public async login(
     data: LoginForm
   ): Promise<SuccessResponse<LoginResponseData>> {
-    const response = await httpClient.post<
+    const response = await this.client.post<
       SuccessResponse<LoginResponseData>,
       LoginForm
-    >(`${this.resource}/auth/login`, data);
+    >(`${this.resource}/login`, data);
 
     return response;
   }
@@ -34,8 +39,8 @@ export class BusinessService {
   public async resendVerificationEmail(
     email: string
   ): Promise<SuccessResponse> {
-    const response = await httpClient.post<SuccessResponse>(
-      `${this.resource}/auth/revalidate-email`,
+    const response = await this.client.post<SuccessResponse>(
+      `${this.resource}/revalidate-email`,
       { email }
     );
 
@@ -43,8 +48,8 @@ export class BusinessService {
   }
 
   public async logout(): Promise<SuccessResponse> {
-    const response = await httpClient.post<SuccessResponse>(
-      `${this.resource}/auth/logout`
+    const response = await this.client.post<SuccessResponse>(
+      `${this.resource}/logout`
     );
 
     return response;
@@ -60,7 +65,7 @@ export class BusinessService {
     >(
       `${
         this.resource
-      }/auth/complete-registration/${userId}?signature=${encodeURIComponent(
+      }/complete-registration/${userId}?signature=${encodeURIComponent(
         signature
       )}&expires=${encodeURIComponent(expires)}`
     );
@@ -74,10 +79,18 @@ export class BusinessService {
     expires: string,
     data: CompleteRegistrationForm
   ): Promise<void> {
-    const response = await httpClient.post<void>(
-      `${this.resource}/auth/complete-registration/${userId}`,
+    const response = await this.client.post<void>(
+      `${this.resource}/complete-registration/${userId}`,
       data,
       { params: { signature, expires } }
+    );
+
+    return response;
+  }
+
+  public async getMyInfo(): Promise<SuccessResponse<MyInfoResponse>> {
+    const response = await this.client.get<SuccessResponse<MyInfoResponse>>(
+      `${this.resource}/me`
     );
 
     return response;

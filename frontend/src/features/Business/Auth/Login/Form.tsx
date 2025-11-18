@@ -7,14 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BusinessService } from "@/api/business/business.service";
+import { AuthService } from "@/api/business/auth/auth.service";
 import { Spinner } from "@/components/ui/spinner";
 import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
 import { Pathname } from "../../../../config/Pathname";
 import { APP_NAME } from "../../../../config/app";
 import { HttpStatusCode } from "axios";
-import type { LoginResponseData } from "../../../../api/business/business.types";
+import type { LoginResponseData } from "../../../../api/business/auth/auth.types";
 import type { SuccessResponse } from "../../../../api/types/Response";
 import { BUSINESS_TOKEN_KEY } from "../../../../config/localStorage";
 import { ErrorSubCode } from "../../../../api/types/ErrorSubCode";
@@ -46,6 +46,8 @@ function Form() {
 
   const handleSuccess = (r: SuccessResponse<LoginResponseData>) => {
     toast.success("Inicio de sesión exitoso");
+
+    cookieStore.set(BUSINESS_TOKEN_KEY, r.data.token);
 
     localStorage.setItem(BUSINESS_TOKEN_KEY, r.data.token);
 
@@ -80,7 +82,7 @@ function Form() {
       return;
     }
 
-    const service = new BusinessService();
+    const service = new AuthService();
 
     setIsLoading(true);
 

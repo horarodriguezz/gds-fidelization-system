@@ -1,6 +1,6 @@
 import { LogOut } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { BusinessService } from "../../../api/business/business.service";
+import { AuthService } from "../../../api/business/auth/auth.service";
 import { useState } from "react";
 import { Spinner } from "../../../components/ui/spinner";
 import { toast } from "sonner";
@@ -9,7 +9,7 @@ export default function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
-    const service = new BusinessService();
+    const service = new AuthService();
 
     setIsLoading(true);
 

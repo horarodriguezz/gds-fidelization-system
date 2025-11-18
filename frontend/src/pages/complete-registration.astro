@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 
-import { BusinessService } from "../api/business/business.service";
+import { AuthService } from "../api/business/auth/auth.service";
 import type { ApiError } from "../api/types/Error";
 import { Card, CardContent } from "../components/ui/card";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -13,7 +13,7 @@ const userId = queryParams.get("user_id") || "";
 const signature = queryParams.get("signature") || "";
 const expires = queryParams.get("expires") || "";
 
-const service = new BusinessService();
+const service = new AuthService();
 
 let user;
 

@@ -1,6 +1,6 @@
 import { z } from "astro/zod";
-import type { UserModel } from "../types/Models/User";
-import type { Role } from "../types/Enums/Role";
+import type { UserModel } from "../../types/Models/User";
+import type { Role } from "../../types/Enums/Role";
 
 /**
  * POST register
@@ -58,4 +58,12 @@ export interface CompleteRegistrationForm {
   phone_number?: string;
 
   role: Role;
+}
+
+/**
+ * GET my info
+ */
+
+export interface MyInfoResponse {
+  user: UserModel;
 }
