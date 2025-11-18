@@ -1,0 +1,19 @@
+---
+import AuthLayout from "../layouts/Auth/AuthLayout.astro";
+import Form from "@/features/Business/Auth/Contact/Form";
+import SuccessConfirmation from "@/features/Business/Auth/Contact/Dialog";
+import Map from "@/features/Business/Auth/Contact/Map";
+---
+
+<AuthLayout
+  title='Nuestra Ubicación'
+  description='Visitanos y unete a cientos de negocios que ya están aumentando sus ventas y mejorando la retención de clientes con nuestro sistema de puntos.'
+>
+  {/* Columna Izquierda: Mapa */}
+
+  <Map client:only='react' slot='extraContent' />
+
+  {/* Columna Derecha: Formulario */}
+  <Form client:only />
+  <SuccessConfirmation client:load />
+</AuthLayout>
