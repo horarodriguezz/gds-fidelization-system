@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             "role" => $this->role,
             "phoneNumber" => $this->phone_number,
             "createdAt" => $this->created_at,
-            "isActive" => $this->deleted_at === null,
+            "isActive" => $this->deleted_at === null && $this->email_verified_at !== null,
         ];
     }
 }
