@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BusinessService } from "@/api/business/business.service";
+import { AuthService } from "@/api/business/auth/auth.service";
 import { Spinner } from "@/components/ui/spinner";
 import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
@@ -66,7 +66,7 @@ function Form() {
       return;
     }
 
-    const service = new BusinessService();
+    const service = new AuthService();
 
     setIsLoading(true);
 

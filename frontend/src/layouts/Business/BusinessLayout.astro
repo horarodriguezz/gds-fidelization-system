@@ -10,20 +10,6 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<script>
-  import { toast } from "sonner";
-  import { BUSINESS_TOKEN_KEY } from "../../config/localStorage";
-  import { Pathname } from "../../config/Pathname";
-
-  const token = localStorage.getItem(BUSINESS_TOKEN_KEY);
-
-  if (!token) {
-    toast.error("Por favor, inicie sesión para continuar.");
-
-    window.location.href = Pathname.LOGIN;
-  }
-</script>
-
 <BaseLayout title={title}>
   <div class='flex min-h-screen flex-col lg:flex-row'>
     <MobileHeader />

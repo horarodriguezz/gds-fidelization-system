@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BusinessService } from "@/api/business/business.service";
+import { AuthService } from "@/api/business/auth/auth.service";
 import { Spinner } from "@/components/ui/spinner";
 import type { ApiError } from "@/api/types/Error";
 import { toast } from "sonner";
@@ -55,10 +55,6 @@ interface Props {
 }
 
 function Form({ user, signature, expires }: Props) {
-  console.log("User in CompleteRegistration Form:", user);
-  console.log("Signature in CompleteRegistration Form:", signature);
-  console.log("Expires in CompleteRegistration Form:", expires);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -105,7 +101,7 @@ function Form({ user, signature, expires }: Props) {
       return;
     }
 
-    const service = new BusinessService();
+    const service = new AuthService();
 
     setIsLoading(true);
 
