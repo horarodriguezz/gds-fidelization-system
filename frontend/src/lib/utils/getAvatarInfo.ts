@@ -1,4 +1,6 @@
 export default function getAvatarInfo(firstName: string, lastName?: string) {
+  console.log("Generating avatar info for:", firstName, lastName);
+
   const initials = `${firstName[0]}${lastName?.[0] || ""}`.toUpperCase();
 
   const colors = [

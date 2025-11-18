@@ -2,15 +2,19 @@ import getRoleName from "../../../lib/utils/getRoleName";
 import concatStrings from "../../../lib/utils/concatStrings";
 import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 import getAvatarInfo from "../../../lib/utils/getAvatarInfo";
-import { Role } from "../../../api/types/Enums/Role";
-
-const user = {
-  firstName: "Juan",
-  lastName: "Pérez",
-  role: Role.ADMIN,
-};
+import { useStore } from "@nanostores/react";
+import { userInfo, userInfoIsLoading } from "../../../store/business/global";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export default function MyInfo() {
+  const isLoading = useStore(userInfoIsLoading);
+
+  const user = useStore(userInfo);
+
+  if (isLoading || !user || import.meta.env.SSR) {
+    return <Skeleton className='w-full h-14 rounded-lg bg-sidebar-border' />;
+  }
+
   const avatarInfo = getAvatarInfo(user.firstName, user.lastName);
 
   return (
