@@ -16,9 +16,9 @@ import { APP_NAME } from "../../../../config/app";
 import { HttpStatusCode } from "axios";
 import type { LoginResponseData } from "../../../../api/business/auth/auth.types";
 import type { SuccessResponse } from "../../../../api/types/Response";
-import { BUSINESS_TOKEN_KEY } from "../../../../config/localStorage";
 import { ErrorSubCode } from "../../../../api/types/ErrorSubCode";
 import { notVerifyPopupData } from "../../../../store/auth";
+import { CookieName } from "../../../../config/cookies";
 
 const schema = z.object({
   email: z.string().email("El correo electrónico no es válido"),
@@ -47,9 +47,7 @@ function Form() {
   const handleSuccess = (r: SuccessResponse<LoginResponseData>) => {
     toast.success("Inicio de sesión exitoso");
 
-    cookieStore.set(BUSINESS_TOKEN_KEY, r.data.token);
-
-    localStorage.setItem(BUSINESS_TOKEN_KEY, r.data.token);
+    cookieStore.set(CookieName.BUSINESS_TOKEN, r.data.token);
 
     window.location.href = Pathname.BUSINESS_DASHBOARD;
   };

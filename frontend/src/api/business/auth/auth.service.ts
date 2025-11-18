@@ -1,6 +1,5 @@
 import { httpClient } from "../../http";
 import { Service } from "../../http/Service";
-import type { UserModel } from "../../types/Models/User";
 import type { SuccessResponse } from "../../types/Response";
 import type {
   CompleteRegistrationForm,

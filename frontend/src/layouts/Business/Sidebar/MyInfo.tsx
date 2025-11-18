@@ -2,19 +2,13 @@ import getRoleName from "../../../lib/utils/getRoleName";
 import concatStrings from "../../../lib/utils/concatStrings";
 import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 import getAvatarInfo from "../../../lib/utils/getAvatarInfo";
-import { useStore } from "@nanostores/react";
-import { userInfo, userInfoIsLoading } from "../../../store/business/global";
-import { Skeleton } from "../../../components/ui/skeleton";
+import type { UserModel } from "../../../api/types/Models/User";
 
-export default function MyInfo() {
-  const isLoading = useStore(userInfoIsLoading);
+interface Props {
+  user: UserModel;
+}
 
-  const user = useStore(userInfo);
-
-  if (isLoading || !user || import.meta.env.SSR) {
-    return <Skeleton className='w-full h-14 rounded-lg bg-sidebar-border' />;
-  }
-
+export default function MyInfo({ user }: Props) {
   const avatarInfo = getAvatarInfo(user.firstName, user.lastName);
 
   return (

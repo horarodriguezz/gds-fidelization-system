@@ -8,6 +8,8 @@ import node from "@astrojs/node";
 
 // https://astro.buil d/config
 export default defineConfig({
+  output: "server",
+
   vite: {
     plugins: [tailwindcss()],
   },

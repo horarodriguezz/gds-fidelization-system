@@ -4,6 +4,8 @@ import { AuthService } from "../../../api/business/auth/auth.service";
 import { useState } from "react";
 import { Spinner } from "../../../components/ui/spinner";
 import { toast } from "sonner";
+import { Pathname } from "../../../config/Pathname";
+import { CookieName } from "../../../config/cookies";
 
 export default function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,8 +18,11 @@ export default function LogoutButton() {
     service
       .logout()
       .then(() => {
-        localStorage.removeItem("business_token");
-        window.location.href = "/auth/login";
+        cookieStore.delete(CookieName.BUSINESS_TOKEN);
+
+        cookieStore.delete(CookieName.USER);
+
+        window.location.href = Pathname.LOGIN;
         toast.success("Sesión cerrada correctamente");
       })
       .finally(() => {
