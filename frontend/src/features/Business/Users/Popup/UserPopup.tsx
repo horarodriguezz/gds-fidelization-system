@@ -116,12 +116,21 @@ function UserPopup() {
     setIsLoading(true);
 
     if (!editingUser) {
-      service.createUser(data).then(handleSuccess).catch(handleCreateError);
+      service
+        .createUser(data)
+        .then(handleSuccess)
+        .catch(handleCreateError)
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else if ($data.id) {
       service
         .updateUser($data.id as string, data)
         .then(handleSuccess)
-        .catch(handleCreateError);
+        .catch(handleCreateError)
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   };
 
@@ -216,7 +225,7 @@ function UserPopup() {
                       id='email'
                       aria-invalid={fieldState.invalid}
                       placeholder='usuario@email.com'
-                      disabled
+                      disabled={$data.isActive || editingUser}
                       autoComplete='off'
                     />
 

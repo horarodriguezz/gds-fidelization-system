@@ -8,6 +8,7 @@ import { Spinner } from "../../../../components/ui/spinner";
 import { toast } from "sonner";
 import { queryClient } from "../../../../lib/queryClient";
 import type { ApiError } from "../../../../api/types/Error";
+import { Role } from "../../../../api/types/Enums/Role";
 
 interface Props {
   user: UserModel;
@@ -48,8 +49,12 @@ function Actions(props: Props) {
       });
   };
 
+  if (user.role === Role.OWNER) {
+    return null;
+  }
+
   return (
-    <div className='flex items-center justify-end gap-2'>
+    <div className='flex items-center gap-2'>
       <Button variant='ghost' size='sm' onClick={handleEdit}>
         <Pencil className='h-4 w-4' />
       </Button>
