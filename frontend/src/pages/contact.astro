@@ -1,8 +1,8 @@
 ---
-import AuthLayout from "../../layouts/Auth/AuthLayout.astro";
+import AuthLayout from "../layouts/Auth/AuthLayout.astro";
 import Form from "@/features/Business/Auth/Contact/Form";
 import SuccessConfirmation from "@/features/Business/Auth/Contact/Dialog";
-import Map from "@/features/Business/Auth/Contact/Map"; 
+import Map from "@/features/Business/Auth/Contact/Map";
 ---
 
 <AuthLayout
@@ -11,8 +11,7 @@ import Map from "@/features/Business/Auth/Contact/Map";
 >
   {/* Columna Izquierda: Mapa */}
 
-  <Map client:only="react" slot="extraContent"/> 
-
+  <Map client:only='react' slot='extraContent' />
 
   {/* Columna Derecha: Formulario */}
   <Form client:only />
