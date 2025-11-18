@@ -8,4 +8,5 @@ export interface UserModel {
   phoneNumber?: string;
   role: Role;
   createdAt: string;
+  isActive: boolean;
 }
