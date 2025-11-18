@@ -19,6 +19,7 @@ import { toast } from "sonner";
 // import { Pathname } from "../../../../config/Pathname"; // Ya no se usa para Contacto
 import { APP_NAME } from "../../../../config/app";
 import { Textarea } from "../../../../components/ui/textarea";
+import { httpClient } from "../../../../api/http";
 
 const schema = z.object({
   first_name: z
@@ -58,6 +59,23 @@ function Form() {
     },
   });
 
+  const handleError = (e: ApiError) => {
+    if (e.status === 422 && e.data?.errors) {
+      const fieldErrors = e.data.errors;
+
+      fieldErrors.forEach((e: any) => {
+        form.setError(e.field as keyof z.infer<typeof schema>, {
+          type: "server",
+          message: e.message,
+        });
+      });
+
+      return;
+    }
+
+    toast.error(e.message || "Ocurrió un error al enviar el mensaje.");
+  };
+
   const onSubmit = (data: ContactFormData) => {
     if (isLoading) {
       return;
@@ -65,13 +83,19 @@ function Form() {
 
     setIsLoading(true);
 
-    console.log("Datos de contacto a enviar:", data);
-
-    new Promise((resolve) => setTimeout(resolve, 1500))
+    httpClient
+      .post("/contacts", data)
       .then(() => {
         toast.success("¡Mensaje enviado con éxito! Te contactaremos pronto.");
         form.reset();
       })
+      .catch(handleError)
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    new Promise((resolve) => setTimeout(resolve, 1500))
+      .then(() => {})
       .catch((error: ApiError) =>
         toast.error(error.message || "Ocurrió un error al enviar el mensaje.")
       )
@@ -96,7 +120,6 @@ function Form() {
 
       <div className='mb-8'>
         <h2 className='text-3xl font-bold mb-2'>Contáctanos</h2>{" "}
-        {/* Texto modificado */}
         <p className='text-muted-foreground'>
           Completa el formulario y te responderemos a la brevedad.
         </p>

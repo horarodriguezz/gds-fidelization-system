@@ -3,6 +3,7 @@
 use App\Http\Controllers\Business\AuthController as BusinessAuthController;
 use App\Http\Controllers\Business\CustomerController;
 use App\Http\Controllers\Business\UserController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('business')->group(function () {
@@ -44,3 +45,5 @@ Route::prefix('business')->group(function () {
         Route::put('/{user}', 'update');
     });
 });
+
+Route::post('/contacts', [ContactController::class, 'create']);
