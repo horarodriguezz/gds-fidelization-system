@@ -2,8 +2,6 @@
 import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
-// @ts-ignore
-import { Pathname } from "@/config/Pathname";
 import react from "@astrojs/react";
 
 import node from "@astrojs/node";
@@ -21,6 +19,6 @@ export default defineConfig({
   }),
 
   redirects: {
-    "/": Pathname.BUSINESS_DASHBOARD,
+    "/": "/business/",
   },
 });
