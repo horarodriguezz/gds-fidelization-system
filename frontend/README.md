@@ -1,43 +1,127 @@
-# Astro Starter Kit: Minimal
+# Frontend - Sistema de Fidelización
 
-```sh
-npm create astro@latest -- --template minimal
+Aplicación web desarrollada con Astro que proporciona la interfaz de usuario para el sistema de fidelización de comercios PyME.
+
+## Tabla de Contenidos
+
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación y Configuración](#instalación-y-configuración)
+- [Configuración del .env](#configuración-del-env)
+  - [Backend con Docker (Sail)](#backend-con-docker-sail)
+  - [Backend con XAMPP](#backend-con-xampp)
+- [Scripts Disponibles](#scripts-disponibles)
+- [Tecnologías](#tecnologías)
+
+## Estructura del Proyecto
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
+frontend/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── api/                # Servicios y llamadas a la API
+│   ├── components/         # Componentes reutilizables
+│   ├── config/             # Configuraciones de la aplicación
+│   ├── features/           # Funcionalidades por módulo
+│   ├── hooks/              # Custom hooks de React
+│   ├── layouts/            # Layouts de páginas
+│   ├── lib/                # Utilidades y helpers
+│   ├── pages/              # Páginas de la aplicación
+│   ├── store/              # Estado global (store)
+│   ├── styles/             # Estilos globales
+│   ├── types/              # Tipos TypeScript
+│   ├── env.d.ts            # Definiciones de tipos para .env
+│   └── middleware.ts       # Middleware de Astro
+├── public/                 # Archivos estáticos
+├── astro.config.mjs        # Configuración de Astro
+├── tailwind.config.mjs     # Configuración de Tailwind CSS
+├── tsconfig.json           # Configuración de TypeScript
+└── package.json            # Dependencias y scripts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Instalación y Configuración
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+**Requisitos:**
 
-Any static assets, like images, can be placed in the `public/` directory.
+- Node.js 18.x o superior
+- npm, pnpm o yarn
 
-## 🧞 Commands
+**Pasos:**
 
-All commands are run from the root of the project, from a terminal:
+1. Navegar a la carpeta frontend:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```bash
+cd frontend
+```
 
-## 👀 Want to learn more?
+2. Instalar las dependencias:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```bash
+npm install
+# o
+pnpm install
+# o
+yarn install
+```
+
+3. Crear el archivo de variables de entorno:
+
+```bash
+cp .env.example .env
+```
+
+4. Configurar las variables de entorno según como se levanto el backend (ver sección [Configuración del .env](#configuración-del-env))
+
+5. Ejecutar el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+La aplicación estará disponible en `http://localhost:4321`
+
+## Configuración del .env
+
+El archivo `.env` debe configurarse según cómo hayas levantado el backend:
+
+### Backend con Docker (Sail)
+
+Si levantaste el backend usando Docker con Laravel Sail, configura las variables de la siguiente manera:
+
+```env
+# URL de la API del backend (puerto por defecto de Sail)
+PUBLIC_API_URL=http://localhost/api
+
+# O si Sail está configurado en otro puerto
+# PUBLIC_API_URL=http://localhost:80/api
+```
+
+**Nota:** Laravel Sail por defecto expone la aplicación en el puerto 80 (http://localhost).
+
+### Backend con XAMPP
+
+Si levantaste el backend usando XAMPP, configura las variables de la siguiente manera:
+
+```env
+# URL de la API del backend (puerto por defecto de php artisan serve)
+PUBLIC_API_URL=http://localhost:8000/api
+```
+
+**Nota:** El comando `php artisan serve` levanta el servidor en el puerto 8000 por defecto.
+
+## Scripts Disponibles
+
+```bash
+npm run dev          # Iniciar servidor de desarrollo
+npm run build        # Compilar para producción
+npm run preview      # Previsualizar build de producción
+npm run astro        # Ejecutar comandos de Astro CLI
+```
+
+## Tecnologías
+
+- **Astro** - Framework web moderno
+- **TypeScript** - Tipado estático
+- **React** - Componentes interactivos
+- **Tailwind CSS** - Framework CSS utility-first
+- **shadcn/ui** - Componentes UI reutilizables
+- **nanostores** - Gestión de estado (si aplica)
+- **React Hook Form** - Manejo de formularios (si aplica)
