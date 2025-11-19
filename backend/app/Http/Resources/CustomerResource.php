@@ -22,7 +22,8 @@ class CustomerResource extends JsonResource
             "phoneNumber" => $this->phone_number,
             "profilePicture" => $this->profile_picture,
             "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at
+            "updatedAt" => $this->updated_at,
+            "isValidated" => $this->phone_validated_at !== null,
         ];
     }
 }

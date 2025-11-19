@@ -9,4 +9,8 @@ export class Service {
     this.client = client;
     this.resource = resource;
   }
+
+  public getResource(): string {
+    return this.resource;
+  }
 }
