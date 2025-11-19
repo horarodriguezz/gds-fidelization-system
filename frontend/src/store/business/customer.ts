@@ -1,11 +1,14 @@
 import { atom, map } from "nanostores";
 import type { CustomerBusinessModel } from "../../api/types/Models/CustomerBusinessModel";
 import type { PaginationMetadata } from "../../api/types/Paginated";
+import type { CustomersMetricsResponse } from "../../api/business/customers/customers.types";
 
 export const $search = atom("");
 export const $last_visited_after = atom<string | undefined>(undefined);
 export const $last_visited_before = atom<string | undefined>(undefined);
 export const $current_page = atom(1);
+
+export const $metrics = atom<CustomersMetricsResponse | null>(null);
 
 export const $customers = atom<CustomerBusinessModel[]>([]);
 

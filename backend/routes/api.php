@@ -33,6 +33,8 @@ Route::prefix('business')->group(function () {
         Route::put('/{customer}', 'update');
 
         Route::delete('/{customerId}', 'deleteCustomerRelation');
+
+        Route::get('/metrics', 'getCustomersDashboard');
     });
 
     Route::prefix('users')->controller(UserController::class)->middleware('auth:sanctum')->group(function () {

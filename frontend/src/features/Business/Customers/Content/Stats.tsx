@@ -1,16 +1,18 @@
 import React from "react";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Calendar, TrendingUp, Users } from "lucide-react";
-import { $customersPagination } from "../../../../store/business/customer";
+import { $metrics } from "../../../../store/business/customer";
 import { useStore } from "@nanostores/react";
 
 function Stats() {
-  const pagination = useStore($customersPagination);
+  const metrics = useStore($metrics);
 
-  const total = pagination.total;
-  const totalPoints = 458760;
-  const totalVisits = 3420;
-  const visitsAverage = (totalVisits / total).toFixed(2);
+  const {
+    totalCustomers = 0,
+    totalPoints = 0,
+    totalVisits = 0,
+    visitsAverage = 0,
+  } = metrics ?? {};
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
@@ -20,7 +22,7 @@ function Stats() {
             <div>
               <p className='text-sm text-muted-foreground'>Total Clientes</p>
               <p className='text-2xl font-bold text-foreground mt-1'>
-                {total.toLocaleString()}
+                {totalCustomers.toLocaleString()}
               </p>
             </div>
             <div className='h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center'>

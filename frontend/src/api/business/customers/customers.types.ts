@@ -24,3 +24,16 @@ export interface CreateCustomerBody {
 
   phone_number: string;
 }
+
+/**
+ * GET metrics
+ */
+export interface CustomersMetricsResponse {
+  totalCustomers: number;
+
+  totalVisits: number;
+
+  totalPoints: number;
+
+  visitsAverage: number;
+}

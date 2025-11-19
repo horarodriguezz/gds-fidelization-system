@@ -6,6 +6,7 @@ import {
   $isLoadingCustomers,
   $last_visited_after,
   $last_visited_before,
+  $metrics,
   $search,
 } from "../../../../store/business/customer";
 import { CustomersService } from "../../../../api/business/customers/customers.service";
@@ -47,6 +48,11 @@ export default function useCustomers() {
     placeholderData: keepPreviousData,
   });
 
+  const { isPending: metricsArePending, data: metrics } = useQuery({
+    queryKey: [service.getResource(), "metrics"],
+    queryFn: () => service.getCustomersMetrics(),
+  });
+
   useEffect(() => {
     if (response?.data) {
       $customers.set(response.data);
@@ -58,5 +64,11 @@ export default function useCustomers() {
     $isLoadingCustomers.set(isLoading);
   }, [isLoading]);
 
-  return { error, isPending };
+  useEffect(() => {
+    if (metrics?.data) {
+      $metrics.set(metrics.data);
+    }
+  }, [metrics]);
+
+  return { error, isPending: isPending || metricsArePending };
 }

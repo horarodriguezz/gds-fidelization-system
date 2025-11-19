@@ -2,7 +2,12 @@ import { httpClient } from "../../http";
 import { Service } from "../../http/Service";
 import type { CustomerBusinessModel } from "../../types/Models/CustomerBusinessModel";
 import type { Paginated } from "../../types/Paginated";
-import type { CreateCustomerBody, GetCustomerParams } from "./customers.types";
+import type { SuccessResponse } from "../../types/Response";
+import type {
+  CreateCustomerBody,
+  CustomersMetricsResponse,
+  GetCustomerParams,
+} from "./customers.types";
 
 export class CustomersService extends Service {
   constructor() {
@@ -46,6 +51,14 @@ export class CustomersService extends Service {
 
   public async deleteCustomer(customerId: string) {
     const response = await this.client.delete(`${this.resource}/${customerId}`);
+
+    return response;
+  }
+
+  public async getCustomersMetrics() {
+    const response = await this.client.get<
+      SuccessResponse<CustomersMetricsResponse>
+    >(`${this.resource}/metrics`);
 
     return response;
   }
