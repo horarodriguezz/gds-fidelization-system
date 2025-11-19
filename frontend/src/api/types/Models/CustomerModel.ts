@@ -7,4 +7,5 @@ export interface CustomerModel {
   profilePicture?: string;
   createdAt: string;
   updatedAt: string;
+  isValidated: boolean;
 }

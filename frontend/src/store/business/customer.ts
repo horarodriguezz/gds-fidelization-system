@@ -2,6 +2,7 @@ import { atom, map } from "nanostores";
 import type { CustomerBusinessModel } from "../../api/types/Models/CustomerBusinessModel";
 import type { PaginationMetadata } from "../../api/types/Paginated";
 import type { CustomersMetricsResponse } from "../../api/business/customers/customers.types";
+import type { CustomerModel } from "../../api/types/Models/CustomerModel";
 
 export const $search = atom("");
 export const $last_visited_after = atom<string | undefined>(undefined);
@@ -24,3 +25,7 @@ export const $customersPagination = map<PaginationMetadata>({
 });
 
 export const $isLoadingCustomers = atom(false);
+
+export const $customerPopupOpen = atom(false);
+
+export const $editingCustomer = atom<CustomerModel | undefined>(undefined);

@@ -29,7 +29,9 @@ export const columns: ColumnDef<CustomerBusinessModel>[] = [
   },
   {
     accessorKey: "actions",
-    header: "Acciones",
+    header: () => (
+      <span className='w-full flex items-center justify-end'>Acciones</span>
+    ),
     cell: ({ row }) => <Buttons {...row.original.customer} />,
   },
 ];

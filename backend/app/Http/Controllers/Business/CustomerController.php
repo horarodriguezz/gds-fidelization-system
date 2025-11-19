@@ -83,7 +83,7 @@ class CustomerController extends Controller {
     $lastVisitedAfter = $validated['last_visited_after'] ?? null;
     $lastVisitedBefore = $validated['last_visited_before'] ?? null;
 
-    $query = CustomerBusiness::where('business_id', $businessId);
+    $query = CustomerBusiness::where('business_id', $businessId)->orderByDesc('updated_at');
 
     if ($search) {
       $query->whereHas('customer', function ($q) use ($search) {

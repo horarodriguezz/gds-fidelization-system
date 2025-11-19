@@ -1,9 +1,12 @@
 import React from "react";
 import { Button } from "../../../components/ui/button";
 import { Plus } from "lucide-react";
+import { $customerPopupOpen } from "../../../store/business/customer";
 
 function Header() {
-  const handleOpenDialog = () => {};
+  const handleOpenDialog = () => {
+    $customerPopupOpen.set(true);
+  };
 
   return (
     <div className='border-b border-border bg-card'>

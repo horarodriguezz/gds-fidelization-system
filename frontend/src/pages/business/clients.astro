@@ -1,11 +1,8 @@
 ---
 import BusinessLayout from "../../layouts/Business/BusinessLayout.astro";
 import Customers from "@/features/Business/Customers/Customers";
-import CustomersPopup from "@/features/Business/Customers/Popup/CustomerPopup";
 ---
 
 <BusinessLayout title='Clientes'>
   <Customers client:load />
-
-  <CustomersPopup client:load />
 </BusinessLayout>
