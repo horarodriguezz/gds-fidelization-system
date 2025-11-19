@@ -1,5 +1,7 @@
 import { httpClient } from "../../http";
 import { Service } from "../../http/Service";
+import type { CustomerBusinessModel } from "../../types/Models/CustomerBusinessModel";
+import type { Paginated } from "../../types/Paginated";
 import type { CreateCustomerBody, GetCustomerParams } from "./customers.types";
 
 export class CustomersService extends Service {
@@ -11,15 +13,18 @@ export class CustomersService extends Service {
     const { last_visited_after, last_visited_before, search, page, per_page } =
       params ?? {};
 
-    const response = await this.client.get(`${this.resource}`, {
-      params: {
-        last_visited_after,
-        last_visited_before,
-        search,
-        page,
-        per_page,
-      },
-    });
+    const response = await this.client.get<Paginated<CustomerBusinessModel>>(
+      `${this.resource}`,
+      {
+        params: {
+          last_visited_after,
+          last_visited_before,
+          search,
+          page,
+          per_page,
+        },
+      }
+    );
 
     return response;
   }

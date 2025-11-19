@@ -1,9 +1,13 @@
 import React from "react";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Calendar, TrendingUp, Users } from "lucide-react";
+import { $customersPagination } from "../../../../store/business/customer";
+import { useStore } from "@nanostores/react";
 
 function Stats() {
-  const total = 1200;
+  const pagination = useStore($customersPagination);
+
+  const total = pagination.total;
   const totalPoints = 458760;
   const totalVisits = 3420;
   const visitsAverage = (totalVisits / total).toFixed(2);

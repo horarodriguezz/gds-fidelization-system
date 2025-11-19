@@ -4,8 +4,7 @@ export interface CustomerModel {
   lastName?: string;
   email?: string;
   phoneNumber: string;
-  profilePictureUrl?: string;
-  pointsBalance: number;
+  profilePicture?: string;
   createdAt: string;
   updatedAt: string;
 }

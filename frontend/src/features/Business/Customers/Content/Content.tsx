@@ -1,6 +1,7 @@
 import React from "react";
 import Stats from "./Stats";
 import CustomerFilters from "./CustomerFilters";
+import Table from "./Table/Table";
 
 function Content() {
   return (
@@ -8,6 +9,8 @@ function Content() {
       <Stats />
 
       <CustomerFilters />
+
+      <Table />
     </main>
   );
 }

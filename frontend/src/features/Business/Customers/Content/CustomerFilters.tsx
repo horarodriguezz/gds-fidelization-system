@@ -1,29 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Search } from "lucide-react";
 import { Input } from "../../../../components/ui/input";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select";
+  $customersPagination,
+  $search,
+} from "../../../../store/business/customer";
+import { useStore } from "@nanostores/react";
+import { useDebounceCallback } from "usehooks-ts";
 
 function Fitlers() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterNivel, setFilterNivel] = useState<string>("todos");
+  const search = useStore($search);
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-    setCurrentPage(1);
-  };
-
-  const handleNivelChange = (value: string) => {
-    setFilterNivel(value);
-    setCurrentPage(1);
-  };
+  const handleSearchChange = useDebounceCallback((value: string) => {
+    $search.set(value);
+    $customersPagination.setKey("currentPage", 1);
+  }, 500);
 
   return (
     <Card className='mb-6'>
@@ -33,24 +26,13 @@ function Fitlers() {
             <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
             <Input
               placeholder='Buscar por nombre, teléfono o email...'
-              value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
               className='pl-10'
+              defaultValue={search}
             />
           </div>
 
-          <Select value={filterNivel} onValueChange={handleNivelChange}>
-            <SelectTrigger className='w-full sm:w-[180px]'>
-              <SelectValue placeholder='Filtrar por nivel' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='todos'>Todos los niveles</SelectItem>
-              <SelectItem value='VIP'>VIP</SelectItem>
-              <SelectItem value='Gold'>Gold</SelectItem>
-              <SelectItem value='Silver'>Silver</SelectItem>
-              <SelectItem value='Bronce'>Bronce</SelectItem>
-            </SelectContent>
-          </Select>
+          {/* Example filter by "Nivel" */}
         </div>
       </CardContent>
     </Card>
