@@ -1,8 +1,11 @@
 ---
 import BusinessLayout from "../../layouts/Business/BusinessLayout.astro";
-import UnderConstruction from "../../layouts/UnderConstruction.astro";
+import Customers from "@/features/Business/Customers/Customers";
+import CustomersPopup from "@/features/Business/Customers/Popup/CustomerPopup";
 ---
 
 <BusinessLayout title='Clientes'>
-  <UnderConstruction />
+  <Customers client:load />
+
+  <CustomersPopup client:load />
 </BusinessLayout>
