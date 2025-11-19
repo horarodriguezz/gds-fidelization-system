@@ -8,6 +8,7 @@ API REST desarrollada con Laravel para la gestión del sistema de fidelización 
 -   [Instalación y Configuración](#instalación-y-configuración)
     -   [Opción 1: Docker con Laravel Sail](#opción-1-docker-con-laravel-sail)
     -   [Opción 2: XAMPP](#opción-2-xampp)
+-   [Configuración del Correo Electrónico](#configuración-del-correo-electrónico)
 -   [Migraciones de Base de Datos](#migraciones-de-base-de-datos)
 -   [Tecnologías](#tecnologías)
 
@@ -64,26 +65,39 @@ cd backend
 cp .env.example .env
 ```
 
-3. Instalar dependencias
+3. Configurar las credenciales de la base de datos en el archivo `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=gds-fidelization-system
+DB_USERNAME=fidelization-system-app
+DB_PASSWORD=password
+```
+
+**Nota:** Sail utiliza contenedores Docker, por lo que `DB_HOST` debe ser `mysql` (nombre del servicio en Docker) y no `127.0.0.1`.
+
+4. Instalar dependencias
 
 ```bash
 composer install
 ```
 
-4. Desde una terminal WSL, navegar a la carpeta backend y levantar los contenedores con Sail:
+5. Desde una terminal WSL, navegar a la carpeta backend y levantar los contenedores con Sail:
 
 ```bash
 cd backend
 ./vendor/bin/sail up
 ```
 
-5. Generar la clave de la aplicación:
+6. Generar la clave de la aplicación:
 
 ```bash
 ./vendor/bin/sail artisan key:generate
 ```
 
-6. Ejecutar las migraciones (ver sección [Migraciones](#migraciones-de-base-de-datos))
+7. Ejecutar las migraciones (ver sección [Migraciones](#migraciones-de-base-de-datos))
 
 La API estará disponible en `http://localhost`
 
@@ -148,6 +162,32 @@ php artisan serve
 ```
 
 La API estará disponible en `http://localhost:8000`
+
+## Configuración del Correo Electrónico
+
+El sistema utiliza **Resend** como servicio de envío de correos electrónicos para funcionalidades como invitaciones de usuarios y notificaciones.
+
+**Pasos para configurar Resend:**
+
+1. Crear una cuenta en [Resend](https://resend.com)
+
+2. Obtener una API Key desde el dashboard de Resend
+
+3. Configurar las variables de entorno en el archivo `.env`:
+
+```env
+MAIL_MAILER=resend
+RESEND_KEY=tu_api_key_aqui
+MAIL_FROM_ADDRESS="info@notifications.tudominio.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+**Documentación oficial:**
+
+-   [Resend - Getting Started](https://resend.com/docs/send-with-laravel)
+-   [Resend - API Keys](https://resend.com/docs/dashboard/api-keys/introduction)
+
+**Nota:** Es necesario configurar Resend para que el sistema pueda enviar correos de invitación y notificaciones. Sin esta configuración, las funcionalidades relacionadas con email no funcionarán.
 
 ## Migraciones de Base de Datos
 
