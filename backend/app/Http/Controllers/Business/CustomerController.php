@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller {
 
@@ -76,13 +75,15 @@ class CustomerController extends Controller {
   public function get(GetPaginatedCustomersRequest $request) {
     $validated = $request->validated();
 
+    $businessId = $request->user()->business_id;
+
     $page = $validated['page'] ?? 1;
     $perPage = $validated['per_page'] ?? 10;
     $search = $validated['search'] ?? null;
     $lastVisitedAfter = $validated['last_visited_after'] ?? null;
     $lastVisitedBefore = $validated['last_visited_before'] ?? null;
 
-    $query = CustomerBusiness::query();
+    $query = CustomerBusiness::where('business_id', $businessId)->orderByDesc('updated_at');
 
     if ($search) {
       $query->whereHas('customer', function ($q) use ($search) {
@@ -163,5 +164,26 @@ class CustomerController extends Controller {
     $query->delete();
 
     return successResponse('Cliente eliminado exitosamente', null);
+  }
+
+  public function getCustomersDashboard(Request $request): JsonResponse {
+    $businessId = $request->user()->business_id;
+
+    $query = CustomerBusiness::where('business_id', $businessId);
+
+    $totalCustomers = $query->count();
+
+    $totalVisits = $query->sum('total_visits');
+
+    $totalPoints = $query->sum('cached_points');
+
+    $visitsAverage = $totalCustomers > 0 ? $totalVisits / $totalCustomers : 0;
+
+    return successResponse('Dashboard de clientes obtenido exitosamente', [
+      'totalCustomers' => $totalCustomers,
+      'totalVisits' => $totalVisits,
+      'totalPoints' => $totalPoints,
+      'visitsAverage' => $visitsAverage
+    ]);
   }
 }

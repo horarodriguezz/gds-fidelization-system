@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Business\Auth\PostRegisterRequest;
 use App\Http\Requests\Business\Auth\PostLoginRequest;
 use App\Http\Requests\Business\Auth\PostRevalidateEmailRequest;
+use App\Http\Requests\Business\Users\ConfirmateUserRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -31,7 +32,7 @@ class AuthController extends Controller
 
             return User::create([
                 'business_id' => $business['id'],
-                'role' => Role::ADMIN,
+                'role' => Role::OWNER,
                 'email' => $validated['email'],
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
@@ -135,4 +136,51 @@ class AuthController extends Controller
 
         return successResponse('Cierre de sesión exitoso');
     }
+    
+    public function me(Request $request): JsonResponse {
+        $user = $request->user();
+
+        return successResponse('Usuario autenticado obtenido exitosamente', ['user' => $user->toResource()]);
+    
+    }
+
+    public function validateInvitationLink(User $user) {
+        if (!$user) {
+            $title = 'Enlace inválido';
+            $message = 'El enlace de invitación no es válido.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
+        if ($user->email_verified_at !== null || $user->password !== null) {
+            $title = 'Enlace inválido';
+            $message = 'El enlace de invitación ya ha sido utilizado.';
+
+            throwAppError($title, 400, ['title' => $title, 'message' => $message]);
+        }
+
+        return successResponse('Link válido', [
+            'user' => $user->toResource()
+        ]);
+    }
+
+    public function completeRegistration(ConfirmateUserRequest $request, User $user): JsonResponse {
+        $validated = $request->validated(); 
+        
+        $user->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
+            'password' => bcrypt($validated['password']),
+        ]);
+        
+        // Marcar email como verificado
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        return successResponse('Registro completado exitosamente');
+    }
+
 }

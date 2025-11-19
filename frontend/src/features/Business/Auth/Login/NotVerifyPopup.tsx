@@ -12,7 +12,7 @@ import { MailWarning } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import { useStore } from "@nanostores/react";
 import { notVerifyPopupData } from "../../../../store/auth";
-import { BusinessService } from "../../../../api/business/business.service";
+import { AuthService } from "../../../../api/business/auth/auth.service";
 import type { SuccessResponse } from "../../../../api/types/Response";
 import { toast } from "sonner";
 import type { ApiError } from "../../../../api/types/Error";
@@ -37,7 +37,7 @@ function NotVerifyPopup() {
   };
 
   const handleResendEmail = () => {
-    const service = new BusinessService();
+    const service = new AuthService();
 
     setIsResending(true);
 

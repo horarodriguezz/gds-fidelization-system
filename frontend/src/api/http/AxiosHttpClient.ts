@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { HttpClient, HttpRequestConfig } from "./HttpClient";
 import axios from "axios";
-import { BUSINESS_TOKEN_KEY } from "../../config/localStorage";
+import { CookieName } from "../../config/cookies";
 
 export class AxiosHttpClient implements HttpClient {
   private client: AxiosInstance;
@@ -19,14 +19,24 @@ export class AxiosHttpClient implements HttpClient {
     this.setupInterceptors();
   }
 
-  private setupInterceptors() {
-    this.client.interceptors.request.use((config) => {
-      const token = localStorage.getItem(BUSINESS_TOKEN_KEY);
+  public setAuthorizationToken(token: string) {
+    this.client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
 
+  private setupInterceptors() {
+    function getCookie(name: string): string | undefined {
+      if (typeof document === "undefined") return undefined;
+
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(";").shift();
+    }
+
+    this.client.interceptors.request.use((config) => {
+      const token = getCookie(CookieName.BUSINESS_TOKEN);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-
       return config;
     });
 

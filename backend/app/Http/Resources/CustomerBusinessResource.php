@@ -16,11 +16,11 @@ class CustomerBusinessResource extends JsonResource
     {
         return [
             "customer" => new CustomerResource($this->whenLoaded('customer')),
-            "customer_id" => $this->when(!$this->relationLoaded('customer'), $this->customer_id),
-            "business_id" => $this->business_id,
-            "created_at" => $this->created_at,
-            "last_visit_at" => $this->updated_at,
-            "cached_points" => $this->cached_points
+            "customerId" => $this->when(!$this->relationLoaded('customer'), $this->customer_id),
+            "businessId" => $this->business_id,
+            "createdAt" => $this->created_at,
+            "lastVisitAt" => $this->updated_at,
+            "cachedPoints" => $this->cached_points
         ];
     }
 }

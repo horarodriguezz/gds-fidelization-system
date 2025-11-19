@@ -1,0 +1,57 @@
+---
+import { ArrowLeft, House } from "@lucide/astro";
+import { Button } from "../components/ui/button";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Pathname } from "../config/Pathname";
+---
+
+<BaseLayout>
+  <div class='min-h-screen flex items-center justify-center bg-background px-4'>
+    <div class='max-w-md w-full text-center space-y-6'>
+      {/* 404 Number */}
+      <div class='relative'>
+        <div
+          class='text-[120px] sm:text-[160px] font-bold text-primary/10 leading-none'
+        >
+          404
+        </div>
+        <div class='absolute inset-0 flex items-center justify-center'>
+          <div
+            class='bg-primary/5 rounded-full w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center'
+          >
+            <div class='text-6xl'>🔍</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Text Content */}
+      <div class='space-y-3'>
+        <h1 class='text-2xl sm:text-3xl font-bold text-foreground'>
+          Página no encontrada
+        </h1>
+        <p class='text-muted-foreground text-balance'>
+          Lo sentimos, la página que buscas no existe o ha sido movida.
+        </p>
+      </div>
+
+      {/* Action Buttons */}
+      <div class='flex flex-col sm:flex-row gap-3 justify-center pt-4'>
+        <Button
+          onClick={() => window.history.back()}
+          variant='outline'
+          className='gap-2'
+        >
+          <ArrowLeft class='w-4 h-4' />
+          Volver atrás
+        </Button>
+
+        <a href={Pathname.BUSINESS_DASHBOARD}>
+          <Button className='gap-2'>
+            <House class='w-4 h-4' />
+            Ir al inicio
+          </Button>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

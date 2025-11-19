@@ -16,13 +16,14 @@ class CustomerResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "first_name" => $this->first_name,
-            "last_name" => $this->last_name,
+            "firstName" => $this->first_name,
+            "lastName" => $this->last_name,
             "email" => $this->email,
-            "phone_number" => $this->phone_number,
-            "profile_picture" => $this->profile_picture,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at
+            "phoneNumber" => $this->phone_number,
+            "profilePicture" => $this->profile_picture,
+            "createdAt" => $this->created_at,
+            "updatedAt" => $this->updated_at,
+            "isValidated" => $this->phone_validated_at !== null,
         ];
     }
 }

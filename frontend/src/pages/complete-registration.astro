@@ -1,0 +1,52 @@
+---
+export const prerender = false;
+
+import { AuthService } from "../api/business/auth/auth.service";
+import type { ApiError } from "../api/types/Error";
+import { Card, CardContent } from "../components/ui/card";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Form from "@/features/Business/Auth/CompleteRegistration/Form";
+
+const queryParams = Astro.url.searchParams;
+
+const userId = queryParams.get("user_id") || "";
+const signature = queryParams.get("signature") || "";
+const expires = queryParams.get("expires") || "";
+
+const service = new AuthService();
+
+let user;
+
+try {
+  const response = await service.validateUserRegistgrationLink(
+    userId,
+    signature,
+    expires
+  );
+
+  user = response.data.user;
+} catch (error: unknown) {
+  const e = error as ApiError;
+
+  const {
+    title = "El enlace de registro no es válido",
+    message = "Por favor, verifica el enlace e intenta nuevamente.",
+  } = e?.data || {};
+
+  const redirectUrl = `/auth/verify?success=false&title=${encodeURIComponent(
+    title
+  )}&message=${encodeURIComponent(message)}`;
+
+  return Astro.redirect(redirectUrl);
+}
+---
+
+<BaseLayout>
+  <div class='w-full h-screen bg-background flex items-center justify-center'>
+    <Card className='w-full max-w-md'>
+      <CardContent>
+        <Form client:load user={user} signature={signature} expires={expires} />
+      </CardContent>
+    </Card>
+  </div>
+</BaseLayout>
